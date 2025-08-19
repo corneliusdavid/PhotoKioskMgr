@@ -1,0 +1,452 @@
+object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
+  Left = 0
+  Top = 0
+  Caption = 'PhotoKiosk Generator'
+  ClientHeight = 600
+  ClientWidth = 800
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop, iPhone, iPad]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 1
+    TabOrder = 0
+    TabPosition = Top
+    Sizes = (
+      800s
+      574s
+      800s
+      574s)
+    object tabGenerate: TTabItem
+      CustomIcon = <
+        item
+        end>
+      TextSettings.Trimming = None
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Generate'
+      ExplicitSize.cx = 50.000000000000000000
+      ExplicitSize.cy = 50.000000000000000000
+      object layGenerateMain: TLayout
+        Align = Client
+        Padding.Left = 20.000000000000000000
+        Padding.Top = 20.000000000000000000
+        Padding.Right = 20.000000000000000000
+        Padding.Bottom = 20.000000000000000000
+        Size.Width = 800.000000000000000000
+        Size.Height = 574.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object lblTitle: TLabel
+          Align = Top
+          StyledSettings = [Family, Style, FontColor]
+          Margins.Bottom = 20.000000000000000000
+          Position.X = 20.000000000000000000
+          Position.Y = 20.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 25.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 18.000000000000000000
+          TextSettings.HorzAlign = Center
+          Text = 'PhotoKiosk Generator'
+          TabOrder = 0
+        end
+        object layButtons: TLayout
+          Align = Top
+          Margins.Bottom = 20.000000000000000000
+          Position.X = 20.000000000000000000
+          Position.Y = 65.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 80.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object btnGenerateFirstName: TButton
+            Align = Left
+            Margins.Right = 10.000000000000000000
+            Size.Width = 160.000000000000000000
+            Size.Height = 80.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = 'Generate'#13#10'First Name View'
+            TextSettings.Trimming = None
+            OnClick = btnGenerateFirstNameClick
+          end
+          object btnGenerateLastName: TButton
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Position.X = 180.000000000000000000
+            Size.Width = 160.000000000000000000
+            Size.Height = 80.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = 'Generate'#13#10'Last Name View'
+            TextSettings.Trimming = None
+            OnClick = btnGenerateLastNameClick
+          end
+          object btnGenerateBoth: TButton
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Position.X = 360.000000000000000000
+            Size.Width = 160.000000000000000000
+            Size.Height = 80.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = 'Generate Both Views'
+            TextSettings.Trimming = None
+            OnClick = btnGenerateBothClick
+          end
+        end
+        object layPreview: TLayout
+          Align = Top
+          Margins.Bottom = 20.000000000000000000
+          Position.X = 20.000000000000000000
+          Position.Y = 165.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 40.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          object btnPreviewFirstName: TButton
+            Align = Left
+            Margins.Right = 10.000000000000000000
+            Size.Width = 140.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = 'Preview First Name'
+            TextSettings.Trimming = None
+            OnClick = btnPreviewFirstNameClick
+          end
+          object btnPreviewLastName: TButton
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Position.X = 160.000000000000000000
+            Size.Width = 140.000000000000000000
+            Size.Height = 40.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = 'Preview Last Name'
+            TextSettings.Trimming = None
+            OnClick = btnPreviewLastNameClick
+          end
+        end
+        object layProgress: TLayout
+          Align = Top
+          Margins.Bottom = 20.000000000000000000
+          Position.X = 20.000000000000000000
+          Position.Y = 225.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 3
+          object lblProgress: TLabel
+            Align = Top
+            Margins.Bottom = 10.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Ready'
+            TabOrder = 0
+          end
+          object rectProgress: TRectangle
+            Align = Top
+            Fill.Color = claLightgray
+            Position.Y = 30.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 30.000000000000000000
+            Size.PlatformDefault = False
+            Stroke.Kind = None
+            object rectProgressBar: TRectangle
+              Align = Left
+              Fill.Color = claGreen
+              Size.Width = 0.000000000000000000
+              Size.Height = 30.000000000000000000
+              Size.PlatformDefault = False
+              Stroke.Kind = None
+            end
+          end
+        end
+        object layOutput: TLayout
+          Align = Client
+          Size.Width = 760.000000000000000000
+          Size.Height = 249.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          object lblOutput: TLabel
+            Align = Top
+            Margins.Bottom = 10.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Output Log:'
+            TabOrder = 0
+          end
+          object memoOutput: TMemo
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            DataDetectorTypes = []
+            ReadOnly = True
+            Align = Client
+            Size.Width = 760.000000000000000000
+            Size.Height = 219.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Viewport.Width = 756.000000000000000000
+            Viewport.Height = 215.000000000000000000
+          end
+        end
+      end
+    end
+    object tabConfigure: TTabItem
+      CustomIcon = <
+        item
+        end>
+      TextSettings.Trimming = None
+      IsSelected = True
+      Size.Width = 73.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'Configure'
+      ExplicitSize.cx = 50.000000000000000000
+      ExplicitSize.cy = 50.000000000000000000
+      object layConfigureMain: TLayout
+        Align = Client
+        Padding.Left = 20.000000000000000000
+        Padding.Top = 20.000000000000000000
+        Padding.Right = 20.000000000000000000
+        Padding.Bottom = 20.000000000000000000
+        Size.Width = 800.000000000000000000
+        Size.Height = 574.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        object layPaths: TLayout
+          Align = Top
+          Margins.Bottom = 20.000000000000000000
+          Position.X = 20.000000000000000000
+          Position.Y = 20.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 320.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          object lblPhotoPath: TLabel
+            Align = Top
+            Margins.Bottom = 5.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Photo Directory:'
+            TabOrder = 0
+          end
+          object edtPhotoPath: TEdit
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            Align = Top
+            TabOrder = 1
+            Position.Y = 25.000000000000000000
+            Margins.Right = 120.000000000000000000
+            Margins.Bottom = 15.000000000000000000
+            Size.Width = 640.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object btnBrowsePhotoPath: TButton
+            Align = Top
+            Margins.Left = 650.000000000000000000
+            Margins.Bottom = 15.000000000000000000
+            Position.X = 650.000000000000000000
+            Position.Y = 72.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = 'Browse...'
+            TextSettings.Trimming = None
+            OnClick = btnBrowsePhotoPathClick
+          end
+          object lblTemplatePath: TLabel
+            Align = Top
+            Margins.Bottom = 5.000000000000000000
+            Position.Y = 119.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Template Directory:'
+            TabOrder = 3
+          end
+          object edtTemplatePath: TEdit
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            Align = Top
+            TabOrder = 4
+            Position.Y = 144.000000000000000000
+            Margins.Right = 120.000000000000000000
+            Margins.Bottom = 15.000000000000000000
+            Size.Width = 640.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object btnBrowseTemplatePath: TButton
+            Align = Top
+            Margins.Left = 650.000000000000000000
+            Margins.Bottom = 15.000000000000000000
+            Position.X = 650.000000000000000000
+            Position.Y = 191.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 5
+            Text = 'Browse...'
+            TextSettings.Trimming = None
+            OnClick = btnBrowseTemplatePathClick
+          end
+          object lblOutputPath: TLabel
+            Align = Top
+            Margins.Bottom = 5.000000000000000000
+            Position.Y = 238.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Output Directory:'
+            TabOrder = 6
+          end
+          object edtOutputPath: TEdit
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            Align = Top
+            TabOrder = 7
+            Position.Y = 263.000000000000000000
+            Margins.Right = 120.000000000000000000
+            Margins.Bottom = 15.000000000000000000
+            Size.Width = 640.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object btnBrowseOutputPath: TButton
+            Align = Top
+            Margins.Left = 650.000000000000000000
+            Margins.Bottom = 15.000000000000000000
+            Position.X = 650.000000000000000000
+            Position.Y = 310.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 8
+            Text = 'Browse...'
+            TextSettings.Trimming = None
+            OnClick = btnBrowseOutputPathClick
+          end
+        end
+        object layDatabase: TLayout
+          Align = Top
+          Margins.Bottom = 20.000000000000000000
+          Position.X = 20.000000000000000000
+          Position.Y = 360.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 80.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          object lblDatabasePath: TLabel
+            Align = Top
+            Margins.Bottom = 5.000000000000000000
+            Size.Width = 760.000000000000000000
+            Size.Height = 20.000000000000000000
+            Size.PlatformDefault = False
+            Text = 'Database File:'
+            TabOrder = 0
+          end
+          object edtDatabasePath: TEdit
+            Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+            Align = Top
+            TabOrder = 1
+            Position.Y = 25.000000000000000000
+            Margins.Right = 240.000000000000000000
+            Margins.Bottom = 10.000000000000000000
+            Size.Width = 520.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+          end
+          object btnBrowseDatabasePath: TButton
+            Align = Top
+            Margins.Left = 530.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Margins.Bottom = 10.000000000000000000
+            Position.X = 530.000000000000000000
+            Position.Y = 67.000000000000000000
+            Size.Width = 220.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = 'Browse...'
+            TextSettings.Trimming = None
+            OnClick = btnBrowseDatabasePathClick
+          end
+          object btnTestConnection: TButton
+            Align = Top
+            Margins.Left = 650.000000000000000000
+            Margins.Bottom = 10.000000000000000000
+            Position.X = 650.000000000000000000
+            Position.Y = 109.000000000000000000
+            Size.Width = 110.000000000000000000
+            Size.Height = 32.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 3
+            Text = 'Test Connection'
+            TextSettings.Trimming = None
+            OnClick = btnTestConnectionClick
+          end
+        end
+        object layConfigButtons: TLayout
+          Align = Client
+          Size.Width = 760.000000000000000000
+          Size.Height = 94.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          object btnSaveConfig: TButton
+            Align = Left
+            Margins.Right = 10.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 94.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 0
+            Text = 'Save Config'
+            TextSettings.Trimming = None
+            OnClick = btnSaveConfigClick
+          end
+          object btnLoadConfig: TButton
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Margins.Right = 10.000000000000000000
+            Position.X = 140.000000000000000000
+            Size.Width = 120.000000000000000000
+            Size.Height = 94.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 1
+            Text = 'Load Config'
+            TextSettings.Trimming = None
+            OnClick = btnLoadConfigClick
+          end
+          object btnResetToDefaults: TButton
+            Align = Left
+            Margins.Left = 10.000000000000000000
+            Position.X = 280.000000000000000000
+            Size.Width = 140.000000000000000000
+            Size.Height = 94.000000000000000000
+            Size.PlatformDefault = False
+            TabOrder = 2
+            Text = 'Reset to Defaults'
+            TextSettings.Trimming = None
+            OnClick = btnResetToDefaultsClick
+          end
+        end
+      end
+    end
+  end
+end
