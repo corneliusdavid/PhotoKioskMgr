@@ -1,0 +1,168 @@
+object FrameGenerate: TFrameGenerate
+  Size.Width = 800.000000000000000000
+  Size.Height = 600.000000000000000000
+  Size.PlatformDefault = False
+  object layGenerateMain: TLayout
+    Align = Client
+    Padding.Left = 20.000000000000000000
+    Padding.Top = 20.000000000000000000
+    Padding.Right = 20.000000000000000000
+    Padding.Bottom = 20.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object lblTitle: TLabel
+      Align = Top
+      StyledSettings = [Family, Style, FontColor]
+      Margins.Bottom = 20.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 20.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 25.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 18.000000000000000000
+      TextSettings.HorzAlign = Center
+      Text = 'PhotoKiosk Generator'
+      TabOrder = 0
+    end
+    object layButtons: TLayout
+      Align = Top
+      Margins.Bottom = 20.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 65.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 80.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object btnGenerateFirstName: TButton
+        Align = Left
+        Margins.Right = 10.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 80.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Generate'#13#10'First Name View'
+        OnClick = btnGenerateFirstNameClick
+      end
+      object btnGenerateLastName: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Position.X = 180.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 80.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Generate'#13#10'Last Name View'
+        OnClick = btnGenerateLastNameClick
+      end
+      object btnGenerateBoth: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 360.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 80.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Generate Both Views'
+        OnClick = btnGenerateBothClick
+      end
+    end
+    object layPreview: TLayout
+      Align = Top
+      Margins.Bottom = 20.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 165.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object btnPreviewFirstName: TButton
+        Align = Left
+        Margins.Right = 10.000000000000000000
+        Size.Width = 140.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Preview First Name'
+        OnClick = btnPreviewFirstNameClick
+      end
+      object btnPreviewLastName: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 160.000000000000000000
+        Size.Width = 140.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Preview Last Name'
+        OnClick = btnPreviewLastNameClick
+      end
+    end
+    object layProgress: TLayout
+      Align = Top
+      Margins.Bottom = 20.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 225.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 60.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object lblProgress: TLabel
+        Align = Top
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Ready'
+        TabOrder = 0
+      end
+      object rectProgress: TRectangle
+        Align = Top
+        Fill.Color = claLightgray
+        Position.Y = 30.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 30.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        object rectProgressBar: TRectangle
+          Align = Left
+          Fill.Color = claGreen
+          Size.Width = 0.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          Stroke.Kind = None
+        end
+      end
+    end
+    object layOutput: TLayout
+      Align = Client
+      Size.Width = 760.000000000000000000
+      Size.Height = 275.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      object lblOutput: TLabel
+        Align = Top
+        Margins.Bottom = 10.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Output Log:'
+        TabOrder = 0
+      end
+      object memoOutput: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        ReadOnly = True
+        Align = Client
+        Size.Width = 760.000000000000000000
+        Size.Height = 245.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Viewport.Width = 756.000000000000000000
+        Viewport.Height = 241.000000000000000000
+      end
+    end
+  end
+end

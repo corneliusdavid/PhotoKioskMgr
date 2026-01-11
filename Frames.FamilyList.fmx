@@ -1,0 +1,113 @@
+object FrameFamilyList: TFrameFamilyList
+  Size.Width = 800.000000000000000000
+  Size.Height = 600.000000000000000000
+  Size.PlatformDefault = False
+  object layMain: TLayout
+    Align = Client
+    Padding.Left = 20.000000000000000000
+    Padding.Top = 20.000000000000000000
+    Padding.Right = 20.000000000000000000
+    Padding.Bottom = 20.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object layToolbar: TLayout
+      Align = Top
+      Margins.Bottom = 10.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 20.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object btnAdd: TButton
+        Align = Left
+        Margins.Right = 10.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Add'
+        OnClick = btnAddClick
+      end
+      object btnEdit: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Position.X = 100.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Edit'
+        OnClick = btnEditClick
+      end
+      object btnDelete: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Margins.Right = 10.000000000000000000
+        Position.X = 200.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Delete'
+        OnClick = btnDeleteClick
+      end
+      object btnRefresh: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 300.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'Refresh'
+        OnClick = btnRefreshClick
+      end
+    end
+    object laySearch: TLayout
+      Align = Top
+      Margins.Bottom = 10.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 70.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object lblSearch: TLabel
+        Align = Left
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Search:'
+        TabOrder = 0
+      end
+      object edtSearch: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 1
+        Size.Width = 680.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        Position.X = 80.000000000000000000
+        OnChange = edtSearchChange
+      end
+    end
+    object lvFamilies: TListView
+      ItemAppearanceClassName = 'TListItemAppearance'
+      ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+      HeaderAppearanceClassName = 'TListHeaderObjects'
+      FooterAppearanceClassName = 'TListHeaderObjects'
+      Align = Client
+      Size.Width = 760.000000000000000000
+      Size.Height = 430.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      Position.X = 20.000000000000000000
+      Position.Y = 120.000000000000000000
+      OnDblClick = lvFamiliesDblClick
+    end
+  end
+end

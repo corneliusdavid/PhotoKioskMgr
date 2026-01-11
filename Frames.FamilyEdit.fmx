@@ -1,0 +1,154 @@
+object FrameFamilyEdit: TFrameFamilyEdit
+  Size.Width = 800.000000000000000000
+  Size.Height = 600.000000000000000000
+  Size.PlatformDefault = False
+  object layMain: TLayout
+    Align = Client
+    Padding.Left = 20.000000000000000000
+    Padding.Top = 20.000000000000000000
+    Padding.Right = 20.000000000000000000
+    Padding.Bottom = 20.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object layFields: TLayout
+      Align = Client
+      Size.Width = 760.000000000000000000
+      Size.Height = 510.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object lblLastName: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Last Name: *'
+        TabOrder = 0
+      end
+      object edtLastName: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 1
+        Position.Y = 25.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblDisplayName: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 72.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Display Name (e.g., "Smith Family"):'
+        TabOrder = 2
+      end
+      object edtDisplayName: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 3
+        Position.Y = 97.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblPhone: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 144.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Phone:'
+        TabOrder = 4
+      end
+      object edtPhone: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 5
+        Position.Y = 169.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblEmail: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 216.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Email:'
+        TabOrder = 6
+      end
+      object edtEmail: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 7
+        Position.Y = 241.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblNotes: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 288.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Notes:'
+        TabOrder = 8
+      end
+      object memoNotes: TMemo
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        DataDetectorTypes = []
+        Align = Client
+        Size.Width = 760.000000000000000000
+        Size.Height = 197.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 9
+        Position.Y = 313.000000000000000000
+        Viewport.Width = 756.000000000000000000
+        Viewport.Height = 193.000000000000000000
+      end
+    end
+    object layButtons: TLayout
+      Align = Bottom
+      Position.X = 20.000000000000000000
+      Position.Y = 530.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object btnSave: TButton
+        Align = Left
+        Margins.Right = 10.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Save'
+        OnClick = btnSaveClick
+      end
+      object btnCancel: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 120.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+        OnClick = btnCancelClick
+      end
+    end
+  end
+end

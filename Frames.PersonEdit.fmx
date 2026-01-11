@@ -1,0 +1,196 @@
+object FramePersonEdit: TFramePersonEdit
+  Size.Width = 800.000000000000000000
+  Size.Height = 600.000000000000000000
+  Size.PlatformDefault = False
+  object layMain: TLayout
+    Align = Client
+    Padding.Left = 20.000000000000000000
+    Padding.Top = 20.000000000000000000
+    Padding.Right = 20.000000000000000000
+    Padding.Bottom = 20.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object layFields: TLayout
+      Align = Client
+      Size.Width = 760.000000000000000000
+      Size.Height = 510.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object lblFirstName: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'First Name: *'
+        TabOrder = 0
+      end
+      object edtFirstName: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 1
+        Position.Y = 25.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblMiddleName: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 72.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Middle Name:'
+        TabOrder = 2
+      end
+      object edtMiddleName: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 3
+        Position.Y = 97.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblLastName: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 144.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Last Name: *'
+        TabOrder = 4
+      end
+      object edtLastName: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 5
+        Position.Y = 169.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object lblFamily: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 216.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Family: *'
+        TabOrder = 6
+      end
+      object cboFamily: TComboBox
+        Align = Top
+        Position.Y = 241.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 7
+      end
+      object chkIsParent: TCheckBox
+        Align = Top
+        Position.Y = 288.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 19.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 8
+        Text = 'Is Parent'
+      end
+      object lblBirthYear: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 322.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Birth Year:'
+        TabOrder = 9
+      end
+      object edtBirthYear: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 10
+        Position.Y = 347.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        KeyboardType = NumberPad
+      end
+      object lblPhotoFilename: TLabel
+        Align = Top
+        Margins.Bottom = 5.000000000000000000
+        Position.Y = 394.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Photo Filename:'
+        TabOrder = 11
+      end
+      object edtPhotoFilename: TEdit
+        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 12
+        Position.Y = 419.000000000000000000
+        Margins.Right = 120.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Size.Width = 640.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object btnBrowsePhoto: TButton
+        Align = Top
+        Margins.Left = 650.000000000000000000
+        Margins.Bottom = 15.000000000000000000
+        Position.X = 650.000000000000000000
+        Position.Y = 466.000000000000000000
+        Size.Width = 110.000000000000000000
+        Size.Height = 32.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 13
+        Text = 'Browse...'
+        OnClick = btnBrowsePhotoClick
+      end
+    end
+    object layButtons: TLayout
+      Align = Bottom
+      Position.X = 20.000000000000000000
+      Position.Y = 530.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object btnSave: TButton
+        Align = Left
+        Margins.Right = 10.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Save'
+        OnClick = btnSaveClick
+      end
+      object btnCancel: TButton
+        Align = Left
+        Margins.Left = 10.000000000000000000
+        Position.X = 120.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'Cancel'
+        OnClick = btnCancelClick
+      end
+    end
+  end
+end
