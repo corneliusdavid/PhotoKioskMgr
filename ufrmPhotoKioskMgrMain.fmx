@@ -15,9 +15,9 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
     Size.Width = 800.000000000000000000
     Size.Height = 600.000000000000000000
     Size.PlatformDefault = False
-    TabIndex = 0
+    TabIndex = 4
     TabOrder = 0
-    TabPosition = Top
+    TabPosition = None
     OnChange = MainTabsChange
     Sizes = (
       800s
@@ -34,13 +34,15 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       CustomIcon = <
         item
         end>
-      IsSelected = True
+      IsSelected = False
       Size.Width = 38.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
       Text = 'List'
+      ExplicitSize.cx = 38.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object layListContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
@@ -60,6 +62,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       StyleLookup = ''
       TabOrder = 0
       Text = 'Edit Family'
+      ExplicitSize.cx = 77.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object layEditFamilyContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
@@ -79,6 +83,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       StyleLookup = ''
       TabOrder = 0
       Text = 'Edit Person'
+      ExplicitSize.cx = 80.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object layEditPersonContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
@@ -98,6 +104,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       StyleLookup = ''
       TabOrder = 0
       Text = 'Generate'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object layGenerateContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
@@ -110,13 +118,15 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       CustomIcon = <
         item
         end>
-      IsSelected = False
+      IsSelected = True
       Size.Width = 73.000000000000000000
       Size.Height = 26.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
       Text = 'Configure'
+      ExplicitSize.cx = 73.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
       object layConfigureContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
@@ -127,6 +137,12 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
     end
   end
   object FrameStand1: TFrameStand
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    CommonActionPrefix = 'ca_'
+    DefaultHideAndCloseDeferTimeMS = 100
+    DefaultStyleName = 'framestand'
+    DefaultStandName = 'framestand'
     Left = 296
     Top = 208
   end

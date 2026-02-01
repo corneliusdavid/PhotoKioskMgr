@@ -89,8 +89,8 @@ object FramePersonEdit: TFramePersonEdit
       end
       object cboFamily: TComboBox
         Align = Top
-        Position.Y = 241.000000000000000000
         Margins.Bottom = 15.000000000000000000
+        Position.Y = 241.000000000000000000
         Size.Width = 760.000000000000000000
         Size.Height = 32.000000000000000000
         Size.PlatformDefault = False
@@ -98,8 +98,8 @@ object FramePersonEdit: TFramePersonEdit
       end
       object chkIsParent: TCheckBox
         Align = Top
-        Position.Y = 288.000000000000000000
         Margins.Bottom = 15.000000000000000000
+        Position.Y = 288.000000000000000000
         Size.Width = 760.000000000000000000
         Size.Height = 19.000000000000000000
         Size.PlatformDefault = False
@@ -120,12 +120,12 @@ object FramePersonEdit: TFramePersonEdit
         Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
         Align = Top
         TabOrder = 10
+        KeyboardType = NumberPad
         Position.Y = 347.000000000000000000
         Margins.Bottom = 15.000000000000000000
         Size.Width = 760.000000000000000000
         Size.Height = 32.000000000000000000
         Size.PlatformDefault = False
-        KeyboardType = NumberPad
       end
       object lblPhotoFilename: TLabel
         Align = Top
@@ -137,29 +137,33 @@ object FramePersonEdit: TFramePersonEdit
         Text = 'Photo Filename:'
         TabOrder = 11
       end
-      object edtPhotoFilename: TEdit
-        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      object layPhotoFilename: TLayout
         Align = Top
-        TabOrder = 12
+        Margins.Bottom = 15.000000000000000000
         Position.Y = 419.000000000000000000
-        Margins.Right = 120.000000000000000000
-        Margins.Bottom = 15.000000000000000000
-        Size.Width = 640.000000000000000000
+        Size.Width = 760.000000000000000000
         Size.Height = 32.000000000000000000
         Size.PlatformDefault = False
-      end
-      object btnBrowsePhoto: TButton
-        Align = Top
-        Margins.Left = 650.000000000000000000
-        Margins.Bottom = 15.000000000000000000
-        Position.X = 650.000000000000000000
-        Position.Y = 466.000000000000000000
-        Size.Width = 110.000000000000000000
-        Size.Height = 32.000000000000000000
-        Size.PlatformDefault = False
-        TabOrder = 13
-        Text = 'Browse...'
-        OnClick = btnBrowsePhotoClick
+        TabOrder = 12
+        object edtPhotoFilename: TEdit
+          Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+          Align = Client
+          TabOrder = 0
+          Margins.Right = 10.000000000000000000
+          Size.Width = 640.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+        end
+        object btnBrowsePhoto: TButton
+          Align = Right
+          Position.X = 650.000000000000000000
+          Size.Width = 110.000000000000000000
+          Size.Height = 32.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Browse...'
+          OnClick = btnBrowsePhotoClick
+        end
       end
     end
     object layButtons: TLayout
@@ -191,6 +195,100 @@ object FramePersonEdit: TFramePersonEdit
         Text = 'Cancel'
         OnClick = btnCancelClick
       end
+      object btnBack: TButton
+        Align = Right
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Back to List'
+        OnClick = btnBackClick
+      end
     end
+  end
+  object qryPerson: TFDQuery
+    Connection = dmPhotoKiosk.FDConnection
+    SQL.Strings = (
+      'SELECT id, family_id, first_name, middle_name, last_name,'
+      '       is_parent, birth_year, photo_filename'
+      'FROM people'
+      'WHERE id = :id')
+    Left = 680
+    Top = 40
+    ParamData = <
+      item
+        Name = 'ID'
+        DataType = ftInteger
+        ParamType = ptInput
+      end>
+  end
+  object dsPerson: TDataSource
+    DataSet = qryPerson
+    Left = 680
+    Top = 100
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSource = dsPerson
+    ScopeMappings = <>
+    Left = 680
+    Top = 160
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 680
+    Top = 220
+    object LinkControlToField1: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'first_name'
+      Control = edtFirstName
+      Track = True
+    end
+    object LinkControlToField2: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'middle_name'
+      Control = edtMiddleName
+      Track = True
+    end
+    object LinkControlToField3: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'last_name'
+      Control = edtLastName
+      Track = True
+    end
+    object LinkControlToField4: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'is_parent'
+      Control = chkIsParent
+      Track = True
+    end
+    object LinkControlToField5: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'birth_year'
+      Control = edtBirthYear
+      Track = True
+    end
+    object LinkControlToField6: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'photo_filename'
+      Control = edtPhotoFilename
+      Track = True
+    end
+  end
+  object qryFamilies: TFDQuery
+    Connection = dmPhotoKiosk.FDConnection
+    SQL.Strings = (
+      'SELECT id, last_name'
+      'FROM families'
+      'WHERE is_active = 1'
+      'ORDER BY last_name')
+    Left = 720
+    Top = 40
   end
 end

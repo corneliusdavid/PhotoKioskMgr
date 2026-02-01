@@ -42,6 +42,9 @@ type
     procedure HandleNavigateToPersonEdit(PersonID: Integer; FamilyID: Integer);
     procedure HandleNavigateToFamilyList;
     procedure HandleNavigateBackFromPersonEdit(FamilyID: Integer);
+    procedure HandleNavigateToGenerate(Sender: TObject);
+    procedure HandleNavigateToConfigure(Sender: TObject);
+    procedure HandleNavigateToListFromFrame(Sender: TObject);
 
     procedure ShowFamilyList;
     procedure ShowFamilyEdit;
@@ -105,6 +108,15 @@ begin
 
   // PersonEdit -> FamilyEdit navigation
   FPersonEditInfo.Frame.OnNavigateBack := HandleNavigateBackFromPersonEdit;
+
+  // FamilyList -> Generate and Configure navigation
+  FFamilyListInfo.Frame.OnNavigateToGenerate := HandleNavigateToGenerate;
+  FFamilyListInfo.Frame.OnNavigateToConfigure := HandleNavigateToConfigure;
+
+  // Back to list navigation from PersonEdit, Generate, Configure
+  FPersonEditInfo.Frame.OnNavigateToList := HandleNavigateToListFromFrame;
+  FGenerateInfo.Frame.OnNavigateToList := HandleNavigateToListFromFrame;
+  FConfigureInfo.Frame.OnNavigateToList := HandleNavigateToListFromFrame;
 end;
 
 procedure TfrmPhotoKioskMgrMain.HandleNavigateToFamilyEdit(FamilyID: Integer);
@@ -150,6 +162,22 @@ begin
     // If no family, go back to list
     HandleNavigateToFamilyList;
   end;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateToGenerate(Sender: TObject);
+begin
+  MainTabs.ActiveTab := tabGenerate;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateToConfigure(Sender: TObject);
+begin
+  MainTabs.ActiveTab := tabConfigure;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateToListFromFrame(Sender: TObject);
+begin
+  FFamilyListInfo.Frame.LoadFamilies;
+  MainTabs.ActiveTab := tabList;
 end;
 
 procedure TfrmPhotoKioskMgrMain.MainTabsChange(Sender: TObject);

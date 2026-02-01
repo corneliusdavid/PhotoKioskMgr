@@ -26,12 +26,16 @@ type
     layOutput: TLayout;
     memoOutput: TMemo;
     lblOutput: TLabel;
+    layToolbar: TLayout;
+    btnBack: TButton;
     procedure btnGenerateFirstNameClick(Sender: TObject);
     procedure btnGenerateLastNameClick(Sender: TObject);
     procedure btnGenerateBothClick(Sender: TObject);
     procedure btnPreviewFirstNameClick(Sender: TObject);
     procedure btnPreviewLastNameClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
   private
+    FOnNavigateToList: TNotifyEvent;
     FGenerating: Boolean;
     procedure UpdateProgress(const Step: string; Percent: Integer);
     procedure LogOutput(const Message: string);
@@ -42,6 +46,8 @@ type
     procedure PreviewPages(ViewType: string);
   public
     constructor Create(AOwner: TComponent); override;
+
+    property OnNavigateToList: TNotifyEvent read FOnNavigateToList write FOnNavigateToList;
   end;
 
 implementation
@@ -198,6 +204,12 @@ begin
   // TODO: Implement preview functionality
   // Could open generated files in default browser
   ShowMessage('Preview functionality not yet implemented');
+end;
+
+procedure TFrameGenerate.btnBackClick(Sender: TObject);
+begin
+  if Assigned(FOnNavigateToList) then
+    FOnNavigateToList(Self);
 end;
 
 end.

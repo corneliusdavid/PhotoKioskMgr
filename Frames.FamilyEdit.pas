@@ -6,9 +6,19 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Edit, FMX.Controls.Presentation, FMX.ScrollBox, FMX.Memo,
-  udmPhotoKiosk, Data.DB;
+  FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
+  FMX.ListView, FMX.Memo.Types,
+  Data.DB, Data.Bind.EngExt, Fmx.Bind.DBEngExt, System.Rtti,
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.Components,
+  Data.Bind.DBScope, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  udmPhotoKiosk, Beyond.Bind.DateUtils, Beyond.Bind.Json, Beyond.Bind.StrUtils;
 
 type
+  TOnNavigateToPersonEdit = procedure(PersonID: Integer; FamilyID: Integer) of object;
+  TOnNavigateToList = procedure of object;
+
   TFrameFamilyEdit = class(TFrame)
     layMain: TLayout;
     layFields: TLayout;
@@ -25,49 +35,76 @@ type
     layButtons: TLayout;
     btnSave: TButton;
     btnCancel: TButton;
+    dsFamily: TDataSource;
+    BindSourceDB1: TBindSourceDB;
+    BindingsList1: TBindingsList;
+    LinkControlToField1: TLinkControlToField;
+    LinkControlToField2: TLinkControlToField;
+    LinkControlToField3: TLinkControlToField;
+    LinkControlToField4: TLinkControlToField;
+    LinkControlToField5: TLinkControlToField;
+    layMembers: TLayout;
+    lblMembers: TLabel;
+    layMemberButtons: TLayout;
+    btnAddPerson: TButton;
+    btnEditPerson: TButton;
+    lvMembers: TListView;
+    btnBack: TButton;
     procedure btnSaveClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
+    procedure btnAddPersonClick(Sender: TObject);
+    procedure btnEditPersonClick(Sender: TObject);
+    procedure lvMembersDblClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
   private
     FFamilyID: Integer;
     FIsNewFamily: Boolean;
-    procedure ClearFields;
-    procedure LoadFamily(FamilyID: Integer);
-    procedure SaveFamily;
+    FOnNavigateToPersonEdit: TOnNavigateToPersonEdit;
+    FOnNavigateToList: TOnNavigateToList;
+    procedure LoadMembers;
+    function GetSelectedPersonID: Integer;
   public
     constructor Create(AOwner: TComponent); override;
     procedure EditFamily(FamilyID: Integer);
     procedure NewFamily;
+    function SaveFamily: Boolean;
+
+    property FamilyID: Integer read FFamilyID;
+    property OnNavigateToPersonEdit: TOnNavigateToPersonEdit read FOnNavigateToPersonEdit write FOnNavigateToPersonEdit;
+    property OnNavigateToList: TOnNavigateToList read FOnNavigateToList write FOnNavigateToList;
   end;
 
 implementation
 
 {$R *.fmx}
 
-uses
-  FireDAC.Comp.Client;
-
 constructor TFrameFamilyEdit.Create(AOwner: TComponent);
 begin
   inherited;
   FFamilyID := -1;
   FIsNewFamily := True;
-  ClearFields;
-end;
-
-procedure TFrameFamilyEdit.ClearFields;
-begin
-  edtLastName.Text := '';
-  edtDisplayName.Text := '';
-  edtPhone.Text := '';
-  edtEmail.Text := '';
-  memoNotes.Lines.Clear;
 end;
 
 procedure TFrameFamilyEdit.NewFamily;
 begin
   FFamilyID := -1;
   FIsNewFamily := True;
-  ClearFields;
+
+  // Close any existing query and prepare for insert
+  dmPhotoKiosk.qryFamilyEdit.Close;
+
+  // Clear the edit fields
+  edtLastName.Text := '';
+  edtDisplayName.Text := '';
+  edtPhone.Text := '';
+  edtEmail.Text := '';
+  memoNotes.Lines.Clear;
+
+  // Clear members list and hide member buttons
+  lvMembers.Items.Clear;
+  btnAddPerson.Visible := False;
+  btnEditPerson.Visible := False;
+
   edtLastName.SetFocus;
 end;
 
@@ -75,37 +112,64 @@ procedure TFrameFamilyEdit.EditFamily(FamilyID: Integer);
 begin
   FFamilyID := FamilyID;
   FIsNewFamily := False;
-  LoadFamily(FamilyID);
+
+  // Load the family record using LiveBindings
+  dmPhotoKiosk.qryFamilyEdit.Close;
+  dmPhotoKiosk.qryFamilyEdit.ParamByName('id').AsInteger := FamilyID;
+  dmPhotoKiosk.qryFamilyEdit.Open;
+
+  if not dmPhotoKiosk.qryFamilyEdit.Eof then
+    dmPhotoKiosk.qryFamilyEdit.Edit;
+
+  // Load family members and show member buttons
+  LoadMembers;
+  btnAddPerson.Visible := True;
+  btnEditPerson.Visible := True;
 end;
 
-procedure TFrameFamilyEdit.LoadFamily(FamilyID: Integer);
+procedure TFrameFamilyEdit.LoadMembers;
 var
-  qry: TFDQuery;
+  Item: TListViewItem;
 begin
-  qry := TFDQuery.Create(nil);
-  try
-    qry.Connection := dmPhotoKiosk.FDConnection;
-    qry.SQL.Text := 'SELECT * FROM families WHERE id = :id';
-    qry.ParamByName('id').AsInteger := FamilyID;
-    qry.Open;
+  lvMembers.Items.Clear;
 
-    if not qry.Eof then
+  if FFamilyID <= 0 then
+    Exit;
+
+  dmPhotoKiosk.qryFamilyMembers.Close;
+  dmPhotoKiosk.qryFamilyMembers.ParamByName('family_id').AsInteger := FFamilyID;
+  dmPhotoKiosk.qryFamilyMembers.Open;
+
+  lvMembers.BeginUpdate;
+  try
+    while not dmPhotoKiosk.qryFamilyMembers.Eof do
     begin
-      edtLastName.Text := qry.FieldByName('last_name').AsString;
-      edtDisplayName.Text := qry.FieldByName('display_name').AsString;
-      edtPhone.Text := qry.FieldByName('phone').AsString;
-      edtEmail.Text := qry.FieldByName('email').AsString;
-      memoNotes.Lines.Text := qry.FieldByName('notes').AsString;
+      Item := lvMembers.Items.Add;
+      Item.Text := dmPhotoKiosk.qryFamilyMembers.FieldByName('full_name').AsString;
+      if dmPhotoKiosk.qryFamilyMembers.FieldByName('is_parent').AsBoolean then
+        Item.Detail := 'Parent'
+      else
+        Item.Detail := 'Child';
+      Item.Tag := dmPhotoKiosk.qryFamilyMembers.FieldByName('id').AsInteger;
+      dmPhotoKiosk.qryFamilyMembers.Next;
     end;
   finally
-    qry.Free;
+    lvMembers.EndUpdate;
   end;
 end;
 
-procedure TFrameFamilyEdit.SaveFamily;
-var
-  qry: TFDQuery;
+function TFrameFamilyEdit.GetSelectedPersonID: Integer;
 begin
+  Result := -1;
+  if Assigned(lvMembers.Selected) then
+    Result := lvMembers.Selected.Tag;
+end;
+
+function TFrameFamilyEdit.SaveFamily: Boolean;
+begin
+  Result := False;
+
+  // Validate
   if Trim(edtLastName.Text) = '' then
   begin
     ShowMessage('Last Name is required');
@@ -113,57 +177,102 @@ begin
     Exit;
   end;
 
-  qry := TFDQuery.Create(nil);
   try
-    qry.Connection := dmPhotoKiosk.FDConnection;
+    dmPhotoKiosk.EnsureConnected;
 
     if FIsNewFamily then
     begin
       // Insert new family
-      qry.SQL.Text := 'INSERT INTO families (last_name, display_name, phone, email, notes, is_active) ' +
-                      'VALUES (:last_name, :display_name, :phone, :email, :notes, 1)';
+      dmPhotoKiosk.qryInsertFamily.ParamByName('last_name').AsString := Trim(edtLastName.Text);
+      dmPhotoKiosk.qryInsertFamily.ParamByName('display_name').AsString := Trim(edtDisplayName.Text);
+      dmPhotoKiosk.qryInsertFamily.ParamByName('phone').AsString := Trim(edtPhone.Text);
+      dmPhotoKiosk.qryInsertFamily.ParamByName('email').AsString := Trim(edtEmail.Text);
+      dmPhotoKiosk.qryInsertFamily.ParamByName('notes').AsString := memoNotes.Text;
+      dmPhotoKiosk.qryInsertFamily.ExecSQL;
+
+      // Get the new ID
+      dmPhotoKiosk.qryLastInsertedId.Open;
+      FFamilyID := dmPhotoKiosk.qryLastInsertedId.FieldByName('new_id').AsInteger;
+      dmPhotoKiosk.qryLastInsertedId.Close;
+      FIsNewFamily := False;
     end
     else
     begin
-      // Update existing family
-      qry.SQL.Text := 'UPDATE families SET ' +
-                      'last_name = :last_name, ' +
-                      'display_name = :display_name, ' +
-                      'phone = :phone, ' +
-                      'email = :email, ' +
-                      'notes = :notes ' +
-                      'WHERE id = :id';
-      qry.ParamByName('id').AsInteger := FFamilyID;
+      // For existing family, post the changes through the dataset
+      if dmPhotoKiosk.qryFamilyEdit.State in [dsEdit, dsInsert] then
+        dmPhotoKiosk.qryFamilyEdit.Post;
     end;
 
-    qry.ParamByName('last_name').AsString := Trim(edtLastName.Text);
-    qry.ParamByName('display_name').AsString := Trim(edtDisplayName.Text);
-    qry.ParamByName('phone').AsString := Trim(edtPhone.Text);
-    qry.ParamByName('email').AsString := Trim(edtEmail.Text);
-    qry.ParamByName('notes').AsString := memoNotes.Lines.Text;
-
-    qry.ExecSQL;
-
+    Result := True;
     ShowMessage('Family saved successfully');
-  finally
-    qry.Free;
+  except
+    on E: Exception do
+      ShowMessage('Error saving family: ' + E.Message);
   end;
 end;
 
 procedure TFrameFamilyEdit.btnSaveClick(Sender: TObject);
 begin
-  SaveFamily;
-  // TODO: Return to list view or stay in edit mode
+  if SaveFamily then
+  begin
+    // Optionally navigate back to list
+    if Assigned(FOnNavigateToList) then
+      FOnNavigateToList;
+  end;
 end;
 
 procedure TFrameFamilyEdit.btnCancelClick(Sender: TObject);
 begin
-  // TODO: Return to list view without saving
-  if MessageDlg('Discard changes?', TMsgDlgType.mtConfirmation,
+  if dmPhotoKiosk.qryFamilyEdit.State in [dsEdit, dsInsert] then
+    dmPhotoKiosk.qryFamilyEdit.Cancel;
+
+  if Assigned(FOnNavigateToList) then
+    FOnNavigateToList
+  else if MessageDlg('Discard changes?', TMsgDlgType.mtConfirmation,
                 [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes then
   begin
-    ClearFields;
+    // Just cancel the edit state
+    if dmPhotoKiosk.qryFamilyEdit.Active then
+      dmPhotoKiosk.qryFamilyEdit.Close;
   end;
+end;
+
+procedure TFrameFamilyEdit.btnAddPersonClick(Sender: TObject);
+begin
+  // Must save family first if it's new
+  if FIsNewFamily then
+  begin
+    if not SaveFamily then
+      Exit;
+  end;
+
+  if Assigned(FOnNavigateToPersonEdit) then
+    FOnNavigateToPersonEdit(-1, FFamilyID);  // -1 means new person
+end;
+
+procedure TFrameFamilyEdit.btnEditPersonClick(Sender: TObject);
+var
+  PersonID: Integer;
+begin
+  PersonID := GetSelectedPersonID;
+  if PersonID > 0 then
+  begin
+    if Assigned(FOnNavigateToPersonEdit) then
+      FOnNavigateToPersonEdit(PersonID, FFamilyID);
+  end
+  else
+    ShowMessage('Please select a person to edit');
+end;
+
+procedure TFrameFamilyEdit.lvMembersDblClick(Sender: TObject);
+begin
+  btnEditPersonClick(Sender);
+end;
+
+procedure TFrameFamilyEdit.btnBackClick(Sender: TObject);
+begin
+  if Assigned(FOnNavigateToList) then
+    FOnNavigateToList;
 end;
 
 end.

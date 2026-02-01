@@ -66,6 +66,35 @@ object FrameFamilyList: TFrameFamilyList
         Visible = False
         OnClick = btnRefreshClick
       end
+      object btnConfigure: TButton
+        Align = Right
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        Text = 'Configure'
+        OnClick = btnConfigureClick
+      end
+      object btnGenerate: TButton
+        Align = Right
+        Margins.Right = 10.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = 'Generate'
+        OnClick = btnGenerateClick
+      end
+      object btnImport: TButton
+        Align = Right
+        Margins.Right = 10.000000000000000000
+        Size.Width = 80.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 6
+        Text = 'Import'
+        OnClick = btnImportClick
+      end
     end
     object laySearch: TLayout
       Align = Top

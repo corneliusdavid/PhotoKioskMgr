@@ -30,6 +30,7 @@ type
     btnSaveConfig: TButton;
     btnLoadConfig: TButton;
     btnResetToDefaults: TButton;
+    btnBack: TButton;
     procedure btnBrowsePhotoPathClick(Sender: TObject);
     procedure btnBrowseTemplatePathClick(Sender: TObject);
     procedure btnBrowseOutputPathClick(Sender: TObject);
@@ -38,7 +39,9 @@ type
     procedure btnSaveConfigClick(Sender: TObject);
     procedure btnLoadConfigClick(Sender: TObject);
     procedure btnResetToDefaultsClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
   private
+    FOnNavigateToList: TNotifyEvent;
     FConfigPath: string;
     procedure LoadConfiguration;
     procedure SaveConfiguration;
@@ -47,6 +50,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    property OnNavigateToList: TNotifyEvent read FOnNavigateToList write FOnNavigateToList;
   end;
 
 implementation
@@ -230,6 +235,12 @@ begin
   begin
     SetDefaultPaths;
   end;
+end;
+
+procedure TFrameConfigure.btnBackClick(Sender: TObject);
+begin
+  if Assigned(FOnNavigateToList) then
+    FOnNavigateToList(Self);
 end;
 
 end.

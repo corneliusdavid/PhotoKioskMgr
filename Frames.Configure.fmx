@@ -219,6 +219,15 @@ object FrameConfigure: TFrameConfigure
         Text = 'Reset to Defaults'
         OnClick = btnResetToDefaultsClick
       end
+      object btnBack: TButton
+        Align = Right
+        Size.Width = 100.000000000000000000
+        Size.Height = 120.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'Back to List'
+        OnClick = btnBackClick
+      end
     end
   end
 end

@@ -13,9 +13,11 @@ object FrameFamilyEdit: TFrameFamilyEdit
     Size.PlatformDefault = False
     TabOrder = 0
     object layFields: TLayout
-      Align = Client
+      Align = Top
+      Position.X = 20.000000000000000000
+      Position.Y = 20.000000000000000000
       Size.Width = 760.000000000000000000
-      Size.Height = 510.000000000000000000
+      Size.Height = 320.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
       object lblLastName: TLabel
@@ -107,18 +109,74 @@ object FrameFamilyEdit: TFrameFamilyEdit
         Text = 'Notes:'
         TabOrder = 8
       end
-      object memoNotes: TMemo
-        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-        DataDetectorTypes = []
+    end
+    object layMembers: TLayout
+      Align = Client
+      Size.Width = 760.000000000000000000
+      Size.Height = 100.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object lblMembers: TLabel
+        Align = Top
+        Size.Width = 760.000000000000000000
+        Size.Height = 20.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Family Members:'
+        TabOrder = 0
+      end
+      object layMemberButtons: TLayout
+        Align = Top
+        Position.Y = 20.000000000000000000
+        Size.Width = 760.000000000000000000
+        Size.Height = 35.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        object btnAddPerson: TButton
+          Align = Left
+          Margins.Right = 10.000000000000000000
+          Size.Width = 100.000000000000000000
+          Size.Height = 35.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Add Person'
+          OnClick = btnAddPersonClick
+        end
+        object btnEditPerson: TButton
+          Align = Left
+          Position.X = 110.000000000000000000
+          Size.Width = 100.000000000000000000
+          Size.Height = 35.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 1
+          Text = 'Edit Person'
+          OnClick = btnEditPersonClick
+        end
+      end
+      object lvMembers: TListView
+        ItemAppearanceClassName = 'TListItemAppearance'
+        ItemEditAppearanceClassName = 'TListItemShowCheckAppearance'
+        HeaderAppearanceClassName = 'TListHeaderObjects'
+        FooterAppearanceClassName = 'TListHeaderObjects'
         Align = Client
         Size.Width = 760.000000000000000000
-        Size.Height = 197.000000000000000000
+        Size.Height = 45.000000000000000000
         Size.PlatformDefault = False
-        TabOrder = 9
-        Position.Y = 313.000000000000000000
-        Viewport.Width = 756.000000000000000000
-        Viewport.Height = 193.000000000000000000
+        TabOrder = 2
+        OnDblClick = lvMembersDblClick
       end
+    end
+    object memoNotes: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Align = Top
+      Position.X = 20.000000000000000000
+      Position.Y = 340.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 90.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      Viewport.Width = 756.000000000000000000
+      Viewport.Height = 86.000000000000000000
     end
     object layButtons: TLayout
       Align = Bottom
@@ -127,7 +185,7 @@ object FrameFamilyEdit: TFrameFamilyEdit
       Size.Width = 760.000000000000000000
       Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 1
+      TabOrder = 3
       object btnSave: TButton
         Align = Left
         Margins.Right = 10.000000000000000000
@@ -149,6 +207,67 @@ object FrameFamilyEdit: TFrameFamilyEdit
         Text = 'Cancel'
         OnClick = btnCancelClick
       end
+      object btnBack: TButton
+        Align = Right
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'Back to List'
+        OnClick = btnBackClick
+      end
+    end
+  end
+  object dsFamily: TDataSource
+    DataSet = dmPhotoKiosk.qryFamilyEdit
+    Left = 680
+    Top = 100
+  end
+  object BindSourceDB1: TBindSourceDB
+    DataSource = dsFamily
+    ScopeMappings = <>
+    Left = 680
+    Top = 160
+  end
+  object BindingsList1: TBindingsList
+    Methods = <>
+    OutputConverters = <>
+    Left = 680
+    Top = 220
+    object LinkControlToField1: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'last_name'
+      Control = edtLastName
+      Track = True
+    end
+    object LinkControlToField2: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'display_name'
+      Control = edtDisplayName
+      Track = True
+    end
+    object LinkControlToField3: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'phone'
+      Control = edtPhone
+      Track = True
+    end
+    object LinkControlToField4: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'email'
+      Control = edtEmail
+      Track = True
+    end
+    object LinkControlToField5: TLinkControlToField
+      Category = 'Quick Bindings'
+      DataSource = BindSourceDB1
+      FieldName = 'notes'
+      Control = memoNotes
+      Track = True
     end
   end
 end

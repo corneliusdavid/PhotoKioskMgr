@@ -139,7 +139,7 @@ object FrameGenerate: TFrameGenerate
     object layOutput: TLayout
       Align = Client
       Size.Width = 760.000000000000000000
-      Size.Height = 275.000000000000000000
+      Size.Height = 225.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 4
       object lblOutput: TLabel
@@ -157,11 +157,28 @@ object FrameGenerate: TFrameGenerate
         ReadOnly = True
         Align = Client
         Size.Width = 760.000000000000000000
-        Size.Height = 245.000000000000000000
+        Size.Height = 195.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 1
-        Viewport.Width = 756.000000000000000000
-        Viewport.Height = 241.000000000000000000
+        Viewport.Width = 760.000000000000000000
+        Viewport.Height = 195.000000000000000000
+      end
+    end
+    object layToolbar: TLayout
+      Align = Bottom
+      Margins.Top = 10.000000000000000000
+      Size.Width = 760.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      object btnBack: TButton
+        Align = Right
+        Size.Width = 100.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = 'Back to List'
+        OnClick = btnBackClick
       end
     end
   end

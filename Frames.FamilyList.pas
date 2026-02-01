@@ -19,6 +19,9 @@ type
     btnEdit: TButton;
     btnDelete: TButton;
     btnRefresh: TButton;
+    btnConfigure: TButton;
+    btnGenerate: TButton;
+    btnImport: TButton;
     laySearch: TLayout;
     lblSearch: TLabel;
     edtSearch: TEdit;
@@ -29,8 +32,13 @@ type
     procedure btnDeleteClick(Sender: TObject);
     procedure edtSearchChange(Sender: TObject);
     procedure lvFamiliesDblClick(Sender: TObject);
+    procedure btnImportClick(Sender: TObject);
+    procedure btnGenerateClick(Sender: TObject);
+    procedure btnConfigureClick(Sender: TObject);
   private
     FOnNavigateToFamilyEdit: TOnNavigateToFamilyEdit;
+    FOnNavigateToGenerate: TNotifyEvent;
+    FOnNavigateToConfigure: TNotifyEvent;
     procedure FilterFamilies(const SearchText: string);
     function GetSelectedFamilyID: Integer;
   public
@@ -38,6 +46,8 @@ type
     procedure LoadFamilies;
 
     property OnNavigateToFamilyEdit: TOnNavigateToFamilyEdit read FOnNavigateToFamilyEdit write FOnNavigateToFamilyEdit;
+    property OnNavigateToGenerate: TNotifyEvent read FOnNavigateToGenerate write FOnNavigateToGenerate;
+    property OnNavigateToConfigure: TNotifyEvent read FOnNavigateToConfigure write FOnNavigateToConfigure;
   end;
 
 implementation
@@ -202,6 +212,23 @@ end;
 procedure TFrameFamilyList.lvFamiliesDblClick(Sender: TObject);
 begin
   btnEditClick(Sender);
+end;
+
+procedure TFrameFamilyList.btnImportClick(Sender: TObject);
+begin
+  ShowMessage('Import - Not yet implemented');
+end;
+
+procedure TFrameFamilyList.btnGenerateClick(Sender: TObject);
+begin
+  if Assigned(FOnNavigateToGenerate) then
+    FOnNavigateToGenerate(Self);
+end;
+
+procedure TFrameFamilyList.btnConfigureClick(Sender: TObject);
+begin
+  if Assigned(FOnNavigateToConfigure) then
+    FOnNavigateToConfigure(Self);
 end;
 
 end.

@@ -6,9 +6,16 @@ uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Edit, FMX.Controls.Presentation, FMX.ListBox,
-  udmPhotoKiosk, Data.DB;
+  Data.DB, Data.Bind.EngExt, Fmx.Bind.DBEngExt, System.Rtti,
+  System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.Components,
+  Data.Bind.DBScope, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  System.IOUtils, udmPhotoKiosk;
 
 type
+  TOnNavigateBack = procedure(FamilyID: Integer) of object;
+
   TFramePersonEdit = class(TFrame)
     layMain: TLayout;
     layFields: TLayout;
@@ -29,148 +36,162 @@ type
     layButtons: TLayout;
     btnSave: TButton;
     btnCancel: TButton;
+    qryPerson: TFDQuery;
+    dsPerson: TDataSource;
+    BindSourceDB1: TBindSourceDB;
+    BindingsList1: TBindingsList;
+    LinkControlToField1: TLinkControlToField;
+    LinkControlToField2: TLinkControlToField;
+    LinkControlToField3: TLinkControlToField;
+    LinkControlToField4: TLinkControlToField;
+    LinkControlToField5: TLinkControlToField;
+    LinkControlToField6: TLinkControlToField;
+    qryFamilies: TFDQuery;
+    layPhotoFilename: TLayout;
+    btnBack: TButton;
     procedure btnSaveClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure btnBrowsePhotoClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
   private
     FPersonID: Integer;
+    FFamilyID: Integer;
     FIsNewPerson: Boolean;
-    procedure ClearFields;
-    procedure LoadPerson(PersonID: Integer);
+    FOnNavigateBack: TOnNavigateBack;
+    FOnNavigateToList: TNotifyEvent;
     procedure LoadFamilies;
-    procedure SavePerson;
+    procedure SelectFamily(FamilyID: Integer);
+    function GetSelectedFamilyID: Integer;
   public
     constructor Create(AOwner: TComponent); override;
     procedure EditPerson(PersonID: Integer);
     procedure NewPerson(FamilyID: Integer = -1);
+    function SavePerson: Boolean;
+    procedure RefreshFamilies;
+
+    property PersonID: Integer read FPersonID;
+    property FamilyID: Integer read FFamilyID;
+    property OnNavigateBack: TOnNavigateBack read FOnNavigateBack write FOnNavigateBack;
+    property OnNavigateToList: TNotifyEvent read FOnNavigateToList write FOnNavigateToList;
   end;
 
 implementation
 
 {$R *.fmx}
 
-uses
-  FireDAC.Comp.Client, System.IOUtils;
-
 constructor TFramePersonEdit.Create(AOwner: TComponent);
 begin
   inherited;
   FPersonID := -1;
+  FFamilyID := -1;
   FIsNewPerson := True;
   LoadFamilies;
-  ClearFields;
-end;
-
-procedure TFramePersonEdit.ClearFields;
-begin
-  edtFirstName.Text := '';
-  edtMiddleName.Text := '';
-  edtLastName.Text := '';
-  edtBirthYear.Text := '';
-  edtPhotoFilename.Text := '';
-  chkIsParent.IsChecked := False;
-  if cboFamily.Items.Count > 0 then
-    cboFamily.ItemIndex := 0;
 end;
 
 procedure TFramePersonEdit.LoadFamilies;
 var
-  qry: TFDQuery;
   Item: TListBoxItem;
 begin
   cboFamily.Clear;
 
-  qry := TFDQuery.Create(nil);
-  try
-    qry.Connection := dmPhotoKiosk.FDConnection;
-    qry.SQL.Text := 'SELECT id, last_name FROM families WHERE is_active = 1 ORDER BY last_name';
-    qry.Open;
+  qryFamilies.Close;
+  qryFamilies.Open;
 
-    while not qry.Eof do
-    begin
-      Item := TListBoxItem.Create(cboFamily);
-      Item.Text := qry.FieldByName('last_name').AsString;
-      Item.Tag := qry.FieldByName('id').AsInteger;
-      cboFamily.AddObject(Item);
-      qry.Next;
-    end;
-  finally
-    qry.Free;
+  while not qryFamilies.Eof do
+  begin
+    Item := TListBoxItem.Create(cboFamily);
+    Item.Text := qryFamilies.FieldByName('last_name').AsString;
+    Item.Tag := qryFamilies.FieldByName('id').AsInteger;
+    cboFamily.AddObject(Item);
+    qryFamilies.Next;
   end;
 end;
 
-procedure TFramePersonEdit.NewPerson(FamilyID: Integer = -1);
+procedure TFramePersonEdit.RefreshFamilies;
+begin
+  LoadFamilies;
+end;
+
+procedure TFramePersonEdit.SelectFamily(FamilyID: Integer);
 var
   I: Integer;
 begin
-  FPersonID := -1;
-  FIsNewPerson := True;
-  ClearFields;
-
-  // If a family ID is provided, select it
-  if FamilyID > 0 then
+  for I := 0 to cboFamily.Items.Count - 1 do
   begin
-    for I := 0 to cboFamily.Items.Count - 1 do
+    if (cboFamily.ListItems[I] as TListBoxItem).Tag = FamilyID then
     begin
-      if (cboFamily.ListItems[I] as TListBoxItem).Tag = FamilyID then
-      begin
-        cboFamily.ItemIndex := I;
-        Break;
-      end;
+      cboFamily.ItemIndex := I;
+      Exit;
     end;
   end;
+end;
+
+function TFramePersonEdit.GetSelectedFamilyID: Integer;
+begin
+  Result := -1;
+  if cboFamily.ItemIndex >= 0 then
+    Result := (cboFamily.ListItems[cboFamily.ItemIndex] as TListBoxItem).Tag;
+end;
+
+procedure TFramePersonEdit.NewPerson(FamilyID: Integer = -1);
+begin
+  FPersonID := -1;
+  FFamilyID := FamilyID;
+  FIsNewPerson := True;
+
+  // Refresh families list
+  LoadFamilies;
+
+  // Prepare query for insert (empty record)
+  qryPerson.Close;
+  qryPerson.SQL.Text := 'SELECT id, family_id, first_name, middle_name, last_name, ' +
+                        'is_parent, birth_year, photo_filename FROM people WHERE 1=0';
+  qryPerson.Open;
+  qryPerson.Append;
+
+  // Select the family if provided
+  if FamilyID > 0 then
+    SelectFamily(FamilyID)
+  else if cboFamily.Items.Count > 0 then
+    cboFamily.ItemIndex := 0;
 
   edtFirstName.SetFocus;
 end;
 
 procedure TFramePersonEdit.EditPerson(PersonID: Integer);
+var
+  PersonFamilyID: Integer;
 begin
   FPersonID := PersonID;
   FIsNewPerson := False;
-  LoadPerson(PersonID);
-end;
 
-procedure TFramePersonEdit.LoadPerson(PersonID: Integer);
-var
-  qry: TFDQuery;
-  I: Integer;
-begin
-  qry := TFDQuery.Create(nil);
-  try
-    qry.Connection := dmPhotoKiosk.FDConnection;
-    qry.SQL.Text := 'SELECT * FROM people WHERE id = :id';
-    qry.ParamByName('id').AsInteger := PersonID;
-    qry.Open;
+  // Refresh families list
+  LoadFamilies;
 
-    if not qry.Eof then
-    begin
-      edtFirstName.Text := qry.FieldByName('first_name').AsString;
-      edtMiddleName.Text := qry.FieldByName('middle_name').AsString;
-      edtLastName.Text := qry.FieldByName('last_name').AsString;
-      edtBirthYear.Text := qry.FieldByName('birth_year').AsString;
-      edtPhotoFilename.Text := qry.FieldByName('photo_filename').AsString;
-      chkIsParent.IsChecked := qry.FieldByName('is_parent').AsBoolean;
+  // Load the person record
+  qryPerson.Close;
+  qryPerson.SQL.Text := 'SELECT id, family_id, first_name, middle_name, last_name, ' +
+                        'is_parent, birth_year, photo_filename FROM people WHERE id = :id';
+  qryPerson.ParamByName('id').AsInteger := PersonID;
+  qryPerson.Open;
 
-      // Select the family in combo
-      for I := 0 to cboFamily.Items.Count - 1 do
-      begin
-        if (cboFamily.ListItems[I] as TListBoxItem).Tag = qry.FieldByName('family_id').AsInteger then
-        begin
-          cboFamily.ItemIndex := I;
-          Break;
-        end;
-      end;
-    end;
-  finally
-    qry.Free;
+  if not qryPerson.Eof then
+  begin
+    PersonFamilyID := qryPerson.FieldByName('family_id').AsInteger;
+    FFamilyID := PersonFamilyID;
+    SelectFamily(PersonFamilyID);
+    qryPerson.Edit;
   end;
 end;
 
-procedure TFramePersonEdit.SavePerson;
+function TFramePersonEdit.SavePerson: Boolean;
 var
-  qry: TFDQuery;
-  FamilyID: Integer;
+  qryInsert: TFDQuery;
+  SelectedFamilyID: Integer;
 begin
+  Result := False;
+
+  // Validate
   if Trim(edtFirstName.Text) = '' then
   begin
     ShowMessage('First Name is required');
@@ -185,75 +206,87 @@ begin
     Exit;
   end;
 
-  if cboFamily.ItemIndex < 0 then
+  SelectedFamilyID := GetSelectedFamilyID;
+  if SelectedFamilyID <= 0 then
   begin
     ShowMessage('Please select a family');
     Exit;
   end;
 
-  FamilyID := (cboFamily.ListItems[cboFamily.ItemIndex] as TListBoxItem).Tag;
-
-  qry := TFDQuery.Create(nil);
   try
-    qry.Connection := dmPhotoKiosk.FDConnection;
-
     if FIsNewPerson then
     begin
-      // Insert new person
-      qry.SQL.Text := 'INSERT INTO people (family_id, first_name, middle_name, last_name, ' +
-                      'is_parent, birth_year, photo_filename, is_active) ' +
-                      'VALUES (:family_id, :first_name, :middle_name, :last_name, ' +
-                      ':is_parent, :birth_year, :photo_filename, 1)';
+      // For new person, do an INSERT
+      qryInsert := TFDQuery.Create(nil);
+      try
+        qryInsert.Connection := dmPhotoKiosk.FDConnection;
+        qryInsert.SQL.Text := 'INSERT INTO people (family_id, first_name, middle_name, last_name, ' +
+                              'is_parent, birth_year, photo_filename, is_active) ' +
+                              'VALUES (:family_id, :first_name, :middle_name, :last_name, ' +
+                              ':is_parent, :birth_year, :photo_filename, 1)';
+        qryInsert.ParamByName('family_id').AsInteger := SelectedFamilyID;
+        qryInsert.ParamByName('first_name').AsString := Trim(edtFirstName.Text);
+        qryInsert.ParamByName('middle_name').AsString := Trim(edtMiddleName.Text);
+        qryInsert.ParamByName('last_name').AsString := Trim(edtLastName.Text);
+        qryInsert.ParamByName('is_parent').AsBoolean := chkIsParent.IsChecked;
+
+        if Trim(edtBirthYear.Text) <> '' then
+          qryInsert.ParamByName('birth_year').AsInteger := StrToIntDef(edtBirthYear.Text, 0)
+        else
+          qryInsert.ParamByName('birth_year').Clear;
+
+        qryInsert.ParamByName('photo_filename').AsString := Trim(edtPhotoFilename.Text);
+        qryInsert.ExecSQL;
+
+        // Get the new ID
+        qryInsert.SQL.Text := 'SELECT last_insert_rowid() as new_id';
+        qryInsert.Open;
+        FPersonID := qryInsert.FieldByName('new_id').AsInteger;
+        FIsNewPerson := False;
+        FFamilyID := SelectedFamilyID;
+      finally
+        qryInsert.Free;
+      end;
     end
     else
     begin
-      // Update existing person
-      qry.SQL.Text := 'UPDATE people SET ' +
-                      'family_id = :family_id, ' +
-                      'first_name = :first_name, ' +
-                      'middle_name = :middle_name, ' +
-                      'last_name = :last_name, ' +
-                      'is_parent = :is_parent, ' +
-                      'birth_year = :birth_year, ' +
-                      'photo_filename = :photo_filename ' +
-                      'WHERE id = :id';
-      qry.ParamByName('id').AsInteger := FPersonID;
+      // For existing person, update the family_id field manually since it's not bound
+      // Then post the changes through the dataset
+      qryPerson.FieldByName('family_id').AsInteger := SelectedFamilyID;
+      if qryPerson.State in [dsEdit, dsInsert] then
+        qryPerson.Post;
+      FFamilyID := SelectedFamilyID;
     end;
 
-    qry.ParamByName('family_id').AsInteger := FamilyID;
-    qry.ParamByName('first_name').AsString := Trim(edtFirstName.Text);
-    qry.ParamByName('middle_name').AsString := Trim(edtMiddleName.Text);
-    qry.ParamByName('last_name').AsString := Trim(edtLastName.Text);
-    qry.ParamByName('is_parent').AsBoolean := chkIsParent.IsChecked;
-
-    if Trim(edtBirthYear.Text) <> '' then
-      qry.ParamByName('birth_year').AsInteger := StrToIntDef(edtBirthYear.Text, 0)
-    else
-      qry.ParamByName('birth_year').Clear;
-
-    qry.ParamByName('photo_filename').AsString := Trim(edtPhotoFilename.Text);
-
-    qry.ExecSQL;
-
+    Result := True;
     ShowMessage('Person saved successfully');
-  finally
-    qry.Free;
+  except
+    on E: Exception do
+      ShowMessage('Error saving person: ' + E.Message);
   end;
 end;
 
 procedure TFramePersonEdit.btnSaveClick(Sender: TObject);
 begin
-  SavePerson;
-  // TODO: Return to list view or stay in edit mode
+  if SavePerson then
+  begin
+    if Assigned(FOnNavigateBack) then
+      FOnNavigateBack(FFamilyID);
+  end;
 end;
 
 procedure TFramePersonEdit.btnCancelClick(Sender: TObject);
 begin
-  // TODO: Return to list view without saving
-  if MessageDlg('Discard changes?', TMsgDlgType.mtConfirmation,
+  if qryPerson.State in [dsEdit, dsInsert] then
+    qryPerson.Cancel;
+
+  if Assigned(FOnNavigateBack) then
+    FOnNavigateBack(FFamilyID)
+  else if MessageDlg('Discard changes?', TMsgDlgType.mtConfirmation,
                 [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes then
   begin
-    ClearFields;
+    if qryPerson.Active then
+      qryPerson.Close;
   end;
 end;
 
@@ -270,6 +303,12 @@ begin
   finally
     Dialog.Free;
   end;
+end;
+
+procedure TFramePersonEdit.btnBackClick(Sender: TObject);
+begin
+  if Assigned(FOnNavigateToList) then
+    FOnNavigateToList(Self);
 end;
 
 end.
