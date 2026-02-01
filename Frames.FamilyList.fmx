@@ -16,7 +16,7 @@ object FrameFamilyList: TFrameFamilyList
       Align = Bottom
       Margins.Top = 10.000000000000000000
       Position.X = 20.000000000000000000
-      Position.Y = 20.000000000000000000
+      Position.Y = 540.000000000000000000
       Size.Width = 760.000000000000000000
       Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
@@ -68,6 +68,7 @@ object FrameFamilyList: TFrameFamilyList
       end
       object btnConfigure: TButton
         Align = Right
+        Position.X = 500.000000000000000000
         Size.Width = 80.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -78,6 +79,7 @@ object FrameFamilyList: TFrameFamilyList
       object btnGenerate: TButton
         Align = Right
         Margins.Right = 10.000000000000000000
+        Position.X = 580.000000000000000000
         Size.Width = 80.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -88,6 +90,7 @@ object FrameFamilyList: TFrameFamilyList
       object btnImport: TButton
         Align = Right
         Margins.Right = 10.000000000000000000
+        Position.X = 670.000000000000000000
         Size.Width = 80.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
@@ -100,7 +103,7 @@ object FrameFamilyList: TFrameFamilyList
       Align = Top
       Margins.Bottom = 10.000000000000000000
       Position.X = 20.000000000000000000
-      Position.Y = 70.000000000000000000
+      Position.Y = 20.000000000000000000
       Size.Width = 760.000000000000000000
       Size.Height = 40.000000000000000000
       Size.PlatformDefault = False

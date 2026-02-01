@@ -167,12 +167,15 @@ object FrameGenerate: TFrameGenerate
     object layToolbar: TLayout
       Align = Bottom
       Margins.Top = 10.000000000000000000
+      Position.X = 20.000000000000000000
+      Position.Y = 540.000000000000000000
       Size.Width = 760.000000000000000000
       Size.Height = 40.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 5
       object btnBack: TButton
         Align = Right
+        Position.X = 660.000000000000000000
         Size.Width = 100.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False

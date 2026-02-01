@@ -197,6 +197,7 @@ object FramePersonEdit: TFramePersonEdit
       end
       object btnBack: TButton
         Align = Right
+        Position.X = 660.000000000000000000
         Size.Width = 100.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False

@@ -175,8 +175,8 @@ object FrameFamilyEdit: TFrameFamilyEdit
       Size.Height = 90.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 1
-      Viewport.Width = 756.000000000000000000
-      Viewport.Height = 86.000000000000000000
+      Viewport.Width = 760.000000000000000000
+      Viewport.Height = 90.000000000000000000
     end
     object layButtons: TLayout
       Align = Bottom
@@ -209,6 +209,7 @@ object FrameFamilyEdit: TFrameFamilyEdit
       end
       object btnBack: TButton
         Align = Right
+        Position.X = 660.000000000000000000
         Size.Width = 100.000000000000000000
         Size.Height = 50.000000000000000000
         Size.PlatformDefault = False
