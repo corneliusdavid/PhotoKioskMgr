@@ -13,12 +13,16 @@ uses
 type
   TdmPhotoKiosk = class(TDataModule)
     FDConnection: TFDConnection;
+    FDPhysSQLiteDriverLink: TFDPhysSQLiteDriverLink;
     qryFamilyMembers: TFDQuery;
     qryFirstNameView: TFDQuery;
     qryLastNameView: TFDQuery;
     qryNavFirstNameLetters: TFDQuery;
     qryPersonPhotos: TFDQuery;
     qryNavLastNameLetters: TFDQuery;
+    qryInsertFamily: TFDQuery;
+    qryLastInsertedId: TFDQuery;
+    qryFamilyEdit: TFDQuery;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
   private
@@ -40,6 +44,7 @@ type
     procedure BackupDatabase(const BackupPath: string);
     procedure CompactDatabase;
     function TestConnection: Boolean;
+    procedure EnsureConnected;
   end;
 
 var
@@ -77,13 +82,9 @@ end;
 
 procedure TdmPhotoKiosk.SetupConnection;
 begin
-  FDConnection.Params.Clear;
-  FDConnection.Params.Add('Database=' + FDatabasePath);
-  FDConnection.Params.Add('DriverID=SQLite');
-  FDConnection.Params.Add('LockingMode=Normal');
-  FDConnection.Params.Add('Synchronous=Normal');
-  FDConnection.Params.Add('JournalMode=WAL');
-  FDConnection.Params.Add('ForeignKeys=True');
+  FDConnection.Params.Values['Database'] := FDatabasePath;
+  FDConnection.Params.Values['DriverID'] := 'SQLite';
+  FDConnection.Params.Values['OpenMode'] := 'ReadWrite';
 end;
 
 procedure TdmPhotoKiosk.OpenFirstNameView;
@@ -118,8 +119,9 @@ end;
 
 procedure TdmPhotoKiosk.CreateDatabaseIfNeeded;
 begin
-  if not TFile.Exists(FDatabasePath) then
-  begin
+  if TFile.Exists(FDatabasePath) then
+    FDConnection.Open
+  else begin
     // Database doesn't exist, opening it will create the SQLite .db file
     try
       FDConnection.Open;
@@ -129,14 +131,12 @@ begin
       on e:Exception do
         raise Exception.Create('Failed to create database: ' + e.Message);
     end;
-
-    FDConnection.Connected := False;
   end;
 end;
 
 procedure TdmPhotoKiosk.BackupDatabase(const BackupPath: string);
 begin
-  if FDConnection.Connected then
+  if not FDConnection.Connected then
     FDConnection.Open;
 
   try
@@ -163,6 +163,12 @@ begin
   except
     Result := False;
   end;
+end;
+
+procedure TdmPhotoKiosk.EnsureConnected;
+begin
+  if not FDConnection.Connected then
+    FDConnection.Open;
 end;
 
 procedure TdmPhotoKiosk.ExecuteCreationScripts;

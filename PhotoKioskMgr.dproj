@@ -5,11 +5,11 @@
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>135171</TargetedPlatforms>
         <AppType>Application</AppType>
-        <MainSource>PhotoKiosMgr.dpr</MainSource>
-        <ProjectName Condition="'$(ProjectName)'==''">PhotoKiosMgr</ProjectName>
+        <MainSource>PhotoKioskMgr.dpr</MainSource>
+        <ProjectName Condition="'$(ProjectName)'==''">PhotoKioskMgr</ProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
         <Base>true</Base>
@@ -97,7 +97,7 @@
         <AUP_READ_PHONE_STATE>true</AUP_READ_PHONE_STATE>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
-        <SanitizedProjectName>PhotoKiosMgr</SanitizedProjectName>
+        <SanitizedProjectName>PhotoKioskMgr</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>FireDACIBDriver;fmx;DbxCommonDriver;bindengine;IndyIPCommon;emsclient;FrameStandPackage_11_1;IndyProtocols;dbxcds;FmxTeeUI;FireDACSqliteDriver;DbxClientDriver;soapmidas;dbexpress;inet;FireDACDBXDriver;CustomIPTransport;LockBox3DR;IndySystem;FireDACCommon;emsserverresource;bindcompdbx;rtl;DBXSqliteDriver;DataSnapFireDAC;FireDAC;xmlrtl;dsnap;DataSnapNativeClient;emshosting;FireDACCommonDriver;IndyIPClient;emsedge;bindcompfmx;fmxFireDAC;DataSnapCommon;fmxase;dbrtl;DBXInterBaseDriver;bindcomp;inetstn;IndyCore;RESTBackendComponents;RESTComponents;IndyIPServer;dsnapxml;DataSnapClient;DataSnapProviderClient;emsclientfiredac;FireDACDSDriver;tethering;CloudService;BigNumbers;FMXTee;soaprtl;soapserver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -287,7 +287,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">PhotoKiosMgr.dpr</Source>
+                    <Source Name="MainSource">PhotoKioskMgr.dpr</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k290.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
@@ -318,21 +318,21 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win32\Debug\PhotoKiosMgr.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Win32\Debug\PhotoKioskMgr.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>PhotoKiosMgr.exe</RemoteName>
+                        <RemoteName>PhotoKioskMgr.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win64\Debug\PhotoKiosMgr.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Win64\Debug\PhotoKioskMgr.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win64">
-                        <RemoteName>PhotoKiosMgr.exe</RemoteName>
+                        <RemoteName>PhotoKioskMgr.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win64\Debug\PhotoKiosMgr.rsm" Configuration="Debug" Class="DebugSymbols">
+                <DeployFile LocalName="Win64\Debug\PhotoKioskMgr.rsm" Configuration="Debug" Class="DebugSymbols">
                     <Platform Name="Win64">
-                        <RemoteName>PhotoKiosMgr.rsm</RemoteName>
+                        <RemoteName>PhotoKioskMgr.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

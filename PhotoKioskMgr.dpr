@@ -1,4 +1,4 @@
-program PhotoKiosMgr;
+program PhotoKioskMgr;
 
 uses
   System.StartUpCopy,
