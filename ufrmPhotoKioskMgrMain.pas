@@ -27,6 +27,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure MainTabsChange(Sender: TObject);
   private
+    FCreating: Boolean;
     FFamilyListInfo: TFrameInfo<TFrameFamilyList>;
     FFamilyEditInfo: TFrameInfo<TFrameFamilyEdit>;
     FPersonEditInfo: TFrameInfo<TFramePersonEdit>;
@@ -34,6 +35,14 @@ type
     FConfigureInfo: TFrameInfo<TFrameConfigure>;
 
     procedure LoadFrames;
+    procedure SetupNavigationCallbacks;
+
+    // Navigation callback handlers
+    procedure HandleNavigateToFamilyEdit(FamilyID: Integer);
+    procedure HandleNavigateToPersonEdit(PersonID: Integer; FamilyID: Integer);
+    procedure HandleNavigateToFamilyList;
+    procedure HandleNavigateBackFromPersonEdit(FamilyID: Integer);
+
     procedure ShowFamilyList;
     procedure ShowFamilyEdit;
     procedure ShowPersonEdit;
@@ -52,14 +61,22 @@ implementation
 
 procedure TfrmPhotoKioskMgrMain.FormCreate(Sender: TObject);
 begin
+  FCreating := True;
+
   // Set default tab
   MainTabs.ActiveTab := tabList;
 
   // Load all frames
   LoadFrames;
 
-  // Show the initial frame
-  ShowFamilyList;
+  // Setup navigation callbacks between frames
+  SetupNavigationCallbacks;
+
+  FCreating := False;
+
+  // Show the initial frame and load data
+  FFamilyListInfo.Show();
+  FFamilyListInfo.Frame.LoadFamilies;
 end;
 
 procedure TfrmPhotoKioskMgrMain.FormDestroy(Sender: TObject);
@@ -77,6 +94,64 @@ begin
   FConfigureInfo := FrameStand1.New<TFrameConfigure>(layConfigureContainer);
 end;
 
+procedure TfrmPhotoKioskMgrMain.SetupNavigationCallbacks;
+begin
+  // FamilyList -> FamilyEdit navigation
+  FFamilyListInfo.Frame.OnNavigateToFamilyEdit := HandleNavigateToFamilyEdit;
+
+  // FamilyEdit -> FamilyList and -> PersonEdit navigation
+  FFamilyEditInfo.Frame.OnNavigateToList := HandleNavigateToFamilyList;
+  FFamilyEditInfo.Frame.OnNavigateToPersonEdit := HandleNavigateToPersonEdit;
+
+  // PersonEdit -> FamilyEdit navigation
+  FPersonEditInfo.Frame.OnNavigateBack := HandleNavigateBackFromPersonEdit;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateToFamilyEdit(FamilyID: Integer);
+begin
+  if FamilyID > 0 then
+    FFamilyEditInfo.Frame.EditFamily(FamilyID)
+  else
+    FFamilyEditInfo.Frame.NewFamily;
+
+  MainTabs.ActiveTab := tabEditFamily;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateToPersonEdit(PersonID: Integer; FamilyID: Integer);
+begin
+  // Refresh the families list in the person edit frame
+  FPersonEditInfo.Frame.RefreshFamilies;
+
+  if PersonID > 0 then
+    FPersonEditInfo.Frame.EditPerson(PersonID)
+  else
+    FPersonEditInfo.Frame.NewPerson(FamilyID);
+
+  MainTabs.ActiveTab := tabEditPerson;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateToFamilyList;
+begin
+  // Refresh the family list when returning
+  FFamilyListInfo.Frame.LoadFamilies;
+  MainTabs.ActiveTab := tabList;
+end;
+
+procedure TfrmPhotoKioskMgrMain.HandleNavigateBackFromPersonEdit(FamilyID: Integer);
+begin
+  // Return to family edit and refresh the members list
+  if FamilyID > 0 then
+  begin
+    FFamilyEditInfo.Frame.EditFamily(FamilyID);
+    MainTabs.ActiveTab := tabEditFamily;
+  end
+  else
+  begin
+    // If no family, go back to list
+    HandleNavigateToFamilyList;
+  end;
+end;
+
 procedure TfrmPhotoKioskMgrMain.MainTabsChange(Sender: TObject);
 begin
   // Show the appropriate frame based on selected tab
@@ -91,27 +166,32 @@ end;
 
 procedure TfrmPhotoKioskMgrMain.ShowFamilyList;
 begin
-  FFamilyListInfo.Show();
+  if not FCreating then
+    FFamilyListInfo.Show();
 end;
 
 procedure TfrmPhotoKioskMgrMain.ShowFamilyEdit;
 begin
-  FFamilyEditInfo.Show();
+  if not FCreating then
+    FFamilyEditInfo.Show();
 end;
 
 procedure TfrmPhotoKioskMgrMain.ShowPersonEdit;
 begin
-  FPersonEditInfo.Show();
+  if not FCreating then
+    FPersonEditInfo.Show();
 end;
 
 procedure TfrmPhotoKioskMgrMain.ShowGenerate;
 begin
-  FGenerateInfo.Show();
+  if not FCreating then
+    FGenerateInfo.Show();
 end;
 
 procedure TfrmPhotoKioskMgrMain.ShowConfigure;
 begin
-  FConfigureInfo.Show();
+  if not FCreating then
+    FConfigureInfo.Show();
 end;
 
 end.

@@ -13,8 +13,8 @@ object FrameFamilyList: TFrameFamilyList
     Size.PlatformDefault = False
     TabOrder = 0
     object layToolbar: TLayout
-      Align = Top
-      Margins.Bottom = 10.000000000000000000
+      Align = Bottom
+      Margins.Top = 10.000000000000000000
       Position.X = 20.000000000000000000
       Position.Y = 20.000000000000000000
       Size.Width = 760.000000000000000000
@@ -46,7 +46,6 @@ object FrameFamilyList: TFrameFamilyList
       object btnDelete: TButton
         Align = Left
         Margins.Left = 10.000000000000000000
-        Margins.Right = 10.000000000000000000
         Position.X = 200.000000000000000000
         Size.Width = 80.000000000000000000
         Size.Height = 40.000000000000000000
@@ -64,6 +63,7 @@ object FrameFamilyList: TFrameFamilyList
         Size.PlatformDefault = False
         TabOrder = 3
         Text = 'Refresh'
+        Visible = False
         OnClick = btnRefreshClick
       end
     end
@@ -91,7 +91,6 @@ object FrameFamilyList: TFrameFamilyList
         Size.Width = 680.000000000000000000
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
-        Position.X = 80.000000000000000000
         OnChange = edtSearchChange
       end
     end
@@ -102,11 +101,9 @@ object FrameFamilyList: TFrameFamilyList
       FooterAppearanceClassName = 'TListHeaderObjects'
       Align = Client
       Size.Width = 760.000000000000000000
-      Size.Height = 430.000000000000000000
+      Size.Height = 460.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 2
-      Position.X = 20.000000000000000000
-      Position.Y = 120.000000000000000000
       OnDblClick = lvFamiliesDblClick
     end
   end

@@ -10,6 +10,8 @@ uses
   FMX.Edit, udmPhotoKiosk, Data.DB;
 
 type
+  TOnNavigateToFamilyEdit = procedure(FamilyID: Integer) of object;
+
   TFrameFamilyList = class(TFrame)
     layMain: TLayout;
     layToolbar: TLayout;
@@ -28,11 +30,14 @@ type
     procedure edtSearchChange(Sender: TObject);
     procedure lvFamiliesDblClick(Sender: TObject);
   private
-    procedure LoadFamilies;
+    FOnNavigateToFamilyEdit: TOnNavigateToFamilyEdit;
     procedure FilterFamilies(const SearchText: string);
     function GetSelectedFamilyID: Integer;
   public
     constructor Create(AOwner: TComponent); override;
+    procedure LoadFamilies;
+
+    property OnNavigateToFamilyEdit: TOnNavigateToFamilyEdit read FOnNavigateToFamilyEdit write FOnNavigateToFamilyEdit;
   end;
 
 implementation
@@ -45,7 +50,6 @@ uses
 constructor TFrameFamilyList.Create(AOwner: TComponent);
 begin
   inherited;
-  LoadFamilies;
 end;
 
 procedure TFrameFamilyList.LoadFamilies;
@@ -137,8 +141,8 @@ end;
 
 procedure TFrameFamilyList.btnAddClick(Sender: TObject);
 begin
-  // TODO: Show Family Edit frame with new family
-  ShowMessage('Add Family - Not yet implemented');
+  if Assigned(FOnNavigateToFamilyEdit) then
+    FOnNavigateToFamilyEdit(-1);  // -1 means new family
 end;
 
 procedure TFrameFamilyList.btnEditClick(Sender: TObject);
@@ -148,8 +152,8 @@ begin
   FamilyID := GetSelectedFamilyID;
   if FamilyID > 0 then
   begin
-    // TODO: Show Family Edit frame with selected family
-    ShowMessage('Edit Family ID: ' + IntToStr(FamilyID) + ' - Not yet implemented');
+    if Assigned(FOnNavigateToFamilyEdit) then
+      FOnNavigateToFamilyEdit(FamilyID);
   end
   else
     ShowMessage('Please select a family to edit');
