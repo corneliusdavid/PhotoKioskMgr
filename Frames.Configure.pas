@@ -71,7 +71,6 @@ end;
 
 destructor TFrameConfigure.Destroy;
 begin
-  SaveConfiguration;
   inherited;
 end;
 
@@ -115,12 +114,12 @@ end;
 
 procedure TFrameConfigure.LoadConfiguration;
 var
-  Ini: TIniFile;
+  Ini: TMemIniFile;
 begin
   if not TFile.Exists(FConfigPath) then
     Exit;
 
-  Ini := TIniFile.Create(FConfigPath);
+  Ini := TMemIniFile.Create(FConfigPath);
   try
     edtDatabasePath.Text := Ini.ReadString('Paths', 'Database', edtDatabasePath.Text);
     edtPhotoPath.Text := Ini.ReadString('Paths', 'Photos', edtPhotoPath.Text);
@@ -133,14 +132,16 @@ end;
 
 procedure TFrameConfigure.SaveConfiguration;
 var
-  Ini: TIniFile;
+  Ini: TMemIniFile;
 begin
-  Ini := TIniFile.Create(FConfigPath);
+  ForceDirectories(ExtractFilePath(FConfigPath));
+  Ini := TMemIniFile.Create(FConfigPath);
   try
     Ini.WriteString('Paths', 'Database', edtDatabasePath.Text);
     Ini.WriteString('Paths', 'Photos', edtPhotoPath.Text);
     Ini.WriteString('Paths', 'Templates', edtTemplatePath.Text);
     Ini.WriteString('Paths', 'Output', edtOutputPath.Text);
+    Ini.UpdateFile;
   finally
     Ini.Free;
   end;
