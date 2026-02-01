@@ -4,7 +4,6 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  System.IniFiles,
   FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
   FMX.Layouts, FMX.Edit, FMX.Controls.Presentation, udmPhotoKiosk;
 
@@ -42,14 +41,11 @@ type
     procedure btnBackClick(Sender: TObject);
   private
     FOnNavigateToList: TNotifyEvent;
-    FConfigPath: string;
     procedure LoadConfiguration;
     procedure SaveConfiguration;
     procedure SetDefaultPaths;
-    function GetConfigPath: string;
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
 
     property OnNavigateToList: TNotifyEvent read FOnNavigateToList write FOnNavigateToList;
   end;
@@ -64,32 +60,8 @@ uses
 constructor TFrameConfigure.Create(AOwner: TComponent);
 begin
   inherited;
-  FConfigPath := GetConfigPath;
   SetDefaultPaths;
   LoadConfiguration;
-end;
-
-destructor TFrameConfigure.Destroy;
-begin
-  inherited;
-end;
-
-function TFrameConfigure.GetConfigPath: string;
-begin
-  Result := TPath.Combine(TPath.GetDocumentsPath, 'PhotoKiosk');
-  if not TDirectory.Exists(Result) then
-    try
-      TDirectory.CreateDirectory(Result);
-    except
-      ShowMessage('''
-The system prevented the application path from being created.
-You might need to adjust your security systems or allow an
-exception for this path:
-
-''' + Result);
-      Abort;
-    end;
-  Result := TPath.Combine(Result, 'PhotoKiosk.ini');
 end;
 
 procedure TFrameConfigure.SetDefaultPaths;
@@ -114,37 +86,26 @@ end;
 
 procedure TFrameConfigure.LoadConfiguration;
 var
-  Ini: TMemIniFile;
+  Value: string;
 begin
-  if not TFile.Exists(FConfigPath) then
-    Exit;
+  Value := dmPhotoKiosk.GetConfigValue('photo_path');
+  if Value <> '' then
+    edtPhotoPath.Text := Value;
 
-  Ini := TMemIniFile.Create(FConfigPath);
-  try
-    edtDatabasePath.Text := Ini.ReadString('Paths', 'Database', edtDatabasePath.Text);
-    edtPhotoPath.Text := Ini.ReadString('Paths', 'Photos', edtPhotoPath.Text);
-    edtTemplatePath.Text := Ini.ReadString('Paths', 'Templates', edtTemplatePath.Text);
-    edtOutputPath.Text := Ini.ReadString('Paths', 'Output', edtOutputPath.Text);
-  finally
-    Ini.Free;
-  end;
+  Value := dmPhotoKiosk.GetConfigValue('template_path');
+  if Value <> '' then
+    edtTemplatePath.Text := Value;
+
+  Value := dmPhotoKiosk.GetConfigValue('output_path');
+  if Value <> '' then
+    edtOutputPath.Text := Value;
 end;
 
 procedure TFrameConfigure.SaveConfiguration;
-var
-  Ini: TMemIniFile;
 begin
-  ForceDirectories(ExtractFilePath(FConfigPath));
-  Ini := TMemIniFile.Create(FConfigPath);
-  try
-    Ini.WriteString('Paths', 'Database', edtDatabasePath.Text);
-    Ini.WriteString('Paths', 'Photos', edtPhotoPath.Text);
-    Ini.WriteString('Paths', 'Templates', edtTemplatePath.Text);
-    Ini.WriteString('Paths', 'Output', edtOutputPath.Text);
-    Ini.UpdateFile;
-  finally
-    Ini.Free;
-  end;
+  dmPhotoKiosk.SetConfigValue('photo_path', edtPhotoPath.Text);
+  dmPhotoKiosk.SetConfigValue('template_path', edtTemplatePath.Text);
+  dmPhotoKiosk.SetConfigValue('output_path', edtOutputPath.Text);
 end;
 
 procedure TFrameConfigure.btnBrowsePhotoPathClick(Sender: TObject);

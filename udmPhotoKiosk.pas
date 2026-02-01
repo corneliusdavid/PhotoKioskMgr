@@ -45,6 +45,10 @@ type
     procedure CompactDatabase;
     function TestConnection: Boolean;
     procedure EnsureConnected;
+
+    // Configuration
+    function GetConfigValue(const Key: string; const Default: string = ''): string;
+    procedure SetConfigValue(const Key: string; const Value: string);
   end;
 
 var
@@ -169,6 +173,42 @@ procedure TdmPhotoKiosk.EnsureConnected;
 begin
   if not FDConnection.Connected then
     FDConnection.Open;
+end;
+
+function TdmPhotoKiosk.GetConfigValue(const Key: string; const Default: string): string;
+var
+  qry: TFDQuery;
+begin
+  Result := Default;
+  EnsureConnected;
+  qry := TFDQuery.Create(nil);
+  try
+    qry.Connection := FDConnection;
+    qry.SQL.Text := 'SELECT value FROM configuration WHERE key = :key';
+    qry.ParamByName('key').AsString := Key;
+    qry.Open;
+    if not qry.Eof then
+      Result := qry.FieldByName('value').AsString;
+  finally
+    qry.Free;
+  end;
+end;
+
+procedure TdmPhotoKiosk.SetConfigValue(const Key: string; const Value: string);
+var
+  qry: TFDQuery;
+begin
+  EnsureConnected;
+  qry := TFDQuery.Create(nil);
+  try
+    qry.Connection := FDConnection;
+    qry.SQL.Text := 'INSERT OR REPLACE INTO configuration (key, value) VALUES (:key, :value)';
+    qry.ParamByName('key').AsString := Key;
+    qry.ParamByName('value').AsString := Value;
+    qry.ExecSQL;
+  finally
+    qry.Free;
+  end;
 end;
 
 procedure TdmPhotoKiosk.ExecuteCreationScripts;
@@ -322,6 +362,19 @@ begin
     UPDATE people SET modified_date = DATETIME('now') WHERE id = NEW.id;
   END;
 ''');
+
+  // Configuration table for storing app settings
+  FDConnection.ExecSQL('''
+  CREATE TABLE configuration (
+    key TEXT PRIMARY KEY,
+    value TEXT
+  );
+''');
+
+  // Insert default configuration values
+  FDConnection.ExecSQL('INSERT INTO configuration (key, value) VALUES (''photo_path'', '''');');
+  FDConnection.ExecSQL('INSERT INTO configuration (key, value) VALUES (''template_path'', '''');');
+  FDConnection.ExecSQL('INSERT INTO configuration (key, value) VALUES (''output_path'', '''');');
 end;
 
 end.
