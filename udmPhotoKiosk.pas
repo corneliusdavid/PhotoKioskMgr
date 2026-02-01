@@ -88,7 +88,10 @@ procedure TdmPhotoKiosk.SetupConnection;
 begin
   FDConnection.Params.Values['Database'] := FDatabasePath;
   FDConnection.Params.Values['DriverID'] := 'SQLite';
-  FDConnection.Params.Values['OpenMode'] := 'ReadWrite';
+  if TFile.Exists(FDatabasePath) then
+    FDConnection.Params.Values['OpenMode'] := 'ReadWrite'
+  else
+    FDConnection.Params.Values['OpenMode'] := 'CreateUTF8';
 end;
 
 procedure TdmPhotoKiosk.OpenFirstNameView;
