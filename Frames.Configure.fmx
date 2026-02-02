@@ -140,24 +140,13 @@ object FrameConfigure: TFrameConfigure
         Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
         Align = Top
         TabOrder = 1
+        ReadOnly = True
         Position.Y = 25.000000000000000000
-        Margins.Right = 240.000000000000000000
+        Margins.Right = 120.000000000000000000
         Margins.Bottom = 10.000000000000000000
-        Size.Width = 520.000000000000000000
+        Size.Width = 640.000000000000000000
         Size.Height = 32.000000000000000000
         Size.PlatformDefault = False
-        object btnBrowseDatabasePath: TButton
-          Margins.Left = 530.000000000000000000
-          Margins.Right = 10.000000000000000000
-          Margins.Bottom = 10.000000000000000000
-          Position.X = 546.000000000000000000
-          Size.Width = 100.000000000000000000
-          Size.Height = 32.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 2
-          Text = 'Browse...'
-          OnClick = btnBrowseDatabasePathClick
-        end
         object btnTestConnection: TButton
           Margins.Left = 650.000000000000000000
           Margins.Bottom = 10.000000000000000000
@@ -165,7 +154,7 @@ object FrameConfigure: TFrameConfigure
           Size.Width = 100.000000000000000000
           Size.Height = 32.000000000000000000
           Size.PlatformDefault = False
-          TabOrder = 3
+          TabOrder = 0
           Text = 'Test Connection'
           OnClick = btnTestConnectionClick
         end

@@ -2,7 +2,7 @@ program PhotoKioskMgr;
 
 uses
   System.StartUpCopy,
-  FMX.Forms,
+  FMX.Forms, System.SysUtils,
   ufrmPhotoKioskMgrMain in 'ufrmPhotoKioskMgrMain.pas' {frmPhotoKioskMgrMain},
   udmPhotoKiosk in 'udmPhotoKiosk.pas' {dmPhotoKiosk: TDataModule},
   Frames.Configure in 'Frames.Configure.pas' {FrameConfigure: TFrame},
@@ -15,7 +15,15 @@ uses
 
 begin
   Application.Initialize;
-  Application.CreateForm(TdmPhotoKiosk, dmPhotoKiosk);
-  Application.CreateForm(TfrmPhotoKioskMgrMain, frmPhotoKioskMgrMain);
+  try
+    Application.CreateForm(TdmPhotoKiosk, dmPhotoKiosk);
+    Application.CreateForm(TfrmPhotoKioskMgrMain, frmPhotoKioskMgrMain);
+  except
+    on E: Exception do
+    begin
+      Application.ShowException(E);
+      Halt(1);
+    end;
+  end;
   Application.Run;
 end.

@@ -3,7 +3,7 @@ unit udmPhotoKiosk;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.IOUtils,
+  System.SysUtils, System.Classes, System.IOUtils, System.IniFiles,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Phys, FireDAC.Phys.SQLite, FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
@@ -73,15 +73,27 @@ begin
 end;
 
 function TdmPhotoKiosk.GetDatabasePath: string;
+var
+  IniPath: string;
+  Ini: TMemIniFile;
 begin
-  // Cross-platform database location
-  Result := TPath.Combine(TPath.GetDocumentsPath, 'PhotoKiosk');
+  IniPath := TPath.Combine(ExtractFilePath(ParamStr(0)), 'PhotoKiosk.ini');
 
-  // Ensure directory exists
-  if not TDirectory.Exists(Result) then
-    TDirectory.CreateDirectory(Result);
+  if not TFile.Exists(IniPath) then
+    raise Exception.CreateFmt('Configuration file not found: %s. Please reinstall the application.', [IniPath]);
 
-  Result := TPath.Combine(Result, 'PhotoKiosk.db');
+  Ini := TMemIniFile.Create(IniPath);
+  try
+    Result := Ini.ReadString('Database', 'Path', '');
+    if Result = '' then
+      raise Exception.CreateFmt('Database path not configured in: %s', [IniPath]);
+  finally
+    Ini.Free;
+  end;
+
+  // Ensure the database directory exists
+  if not TDirectory.Exists(ExtractFilePath(Result)) then
+    TDirectory.CreateDirectory(ExtractFilePath(Result));
 end;
 
 procedure TdmPhotoKiosk.SetupConnection;

@@ -23,7 +23,6 @@ type
     layDatabase: TLayout;
     lblDatabasePath: TLabel;
     edtDatabasePath: TEdit;
-    btnBrowseDatabasePath: TButton;
     btnTestConnection: TButton;
     layConfigButtons: TLayout;
     btnSaveConfig: TButton;
@@ -33,7 +32,6 @@ type
     procedure btnBrowsePhotoPathClick(Sender: TObject);
     procedure btnBrowseTemplatePathClick(Sender: TObject);
     procedure btnBrowseOutputPathClick(Sender: TObject);
-    procedure btnBrowseDatabasePathClick(Sender: TObject);
     procedure btnTestConnectionClick(Sender: TObject);
     procedure btnSaveConfigClick(Sender: TObject);
     procedure btnLoadConfigClick(Sender: TObject);
@@ -153,25 +151,8 @@ begin
   end;
 end;
 
-procedure TFrameConfigure.btnBrowseDatabasePathClick(Sender: TObject);
-var
-  Dialog: TOpenDialog;
-begin
-  Dialog := TOpenDialog.Create(nil);
-  try
-    Dialog.Title := 'Select Database File';
-    Dialog.Filter := 'SQLite Database|*.db|All Files|*.*';
-    Dialog.DefaultExt := 'db';
-    if Dialog.Execute then
-      edtDatabasePath.Text := Dialog.FileName;
-  finally
-    Dialog.Free;
-  end;
-end;
-
 procedure TFrameConfigure.btnTestConnectionClick(Sender: TObject);
 begin
-  dmPhotoKiosk.DatabasePath := edtDatabasePath.Text;
   if dmPhotoKiosk.TestConnection then
     ShowMessage('Database connection successful!')
   else

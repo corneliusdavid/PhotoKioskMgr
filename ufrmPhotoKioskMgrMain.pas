@@ -66,6 +66,9 @@ procedure TfrmPhotoKioskMgrMain.FormCreate(Sender: TObject);
 begin
   FCreating := True;
 
+  if dmPhotoKiosk.DatabasePath.IsEmpty then
+    Application.Terminate;
+
   // Set default tab
   MainTabs.ActiveTab := tabList;
 
