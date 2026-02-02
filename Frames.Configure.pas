@@ -20,10 +20,6 @@ type
     lblOutputPath: TLabel;
     edtOutputPath: TEdit;
     btnBrowseOutputPath: TButton;
-    layDatabase: TLayout;
-    lblDatabasePath: TLabel;
-    edtDatabasePath: TEdit;
-    btnTestConnection: TButton;
     layConfigButtons: TLayout;
     btnSaveConfig: TButton;
     btnLoadConfig: TButton;
@@ -68,7 +64,6 @@ var
 begin
   BaseDir := TPath.Combine(TPath.GetDocumentsPath, 'PhotoKiosk');
 
-  edtDatabasePath.Text := dmPhotoKiosk.DatabasePath;
   edtPhotoPath.Text := TPath.Combine(BaseDir, 'Photos');
   edtTemplatePath.Text := TPath.Combine(BaseDir, 'Templates');
   edtOutputPath.Text := TPath.Combine(BaseDir, 'Output');

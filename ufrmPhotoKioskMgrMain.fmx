@@ -21,22 +21,22 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
     OnChange = MainTabsChange
     Sizes = (
       800s
-      574s
+      600s
       800s
-      574s
+      600s
       800s
-      574s
+      600s
       800s
-      574s
+      600s
       800s
-      574s)
+      600s)
     object tabList: TTabItem
       CustomIcon = <
         item
         end>
       IsSelected = False
-      Size.Width = 38.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -46,7 +46,7 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       object layListContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
-        Size.Height = 574.000000000000000000
+        Size.Height = 600.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end
@@ -56,8 +56,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
         item
         end>
       IsSelected = False
-      Size.Width = 77.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -67,7 +67,7 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       object layEditFamilyContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
-        Size.Height = 574.000000000000000000
+        Size.Height = 600.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end
@@ -77,8 +77,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
         item
         end>
       IsSelected = False
-      Size.Width = 80.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -88,7 +88,7 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       object layEditPersonContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
-        Size.Height = 574.000000000000000000
+        Size.Height = 600.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end
@@ -98,8 +98,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
         item
         end>
       IsSelected = False
-      Size.Width = 69.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -109,7 +109,7 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       object layGenerateContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
-        Size.Height = 574.000000000000000000
+        Size.Height = 600.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end
@@ -119,8 +119,8 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
         item
         end>
       IsSelected = True
-      Size.Width = 73.000000000000000000
-      Size.Height = 26.000000000000000000
+      Size.Width = 8.000000000000000000
+      Size.Height = 8.000000000000000000
       Size.PlatformDefault = False
       StyleLookup = ''
       TabOrder = 0
@@ -130,7 +130,7 @@ object frmPhotoKioskMgrMain: TfrmPhotoKioskMgrMain
       object layConfigureContainer: TLayout
         Align = Client
         Size.Width = 800.000000000000000000
-        Size.Height = 574.000000000000000000
+        Size.Height = 600.000000000000000000
         Size.PlatformDefault = False
         TabOrder = 0
       end

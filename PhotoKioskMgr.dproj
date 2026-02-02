@@ -236,36 +236,29 @@
         </DelphiCompile>
         <DCCReference Include="ufrmPhotoKioskMgrMain.pas">
             <Form>frmPhotoKioskMgrMain</Form>
-            <FormType>fmx</FormType>
         </DCCReference>
         <DCCReference Include="udmPhotoKiosk.pas">
             <Form>dmPhotoKiosk</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames.Configure.pas">
             <Form>FrameConfigure</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames.FamilyEdit.pas">
             <Form>FrameFamilyEdit</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames.FamilyList.pas">
             <Form>FrameFamilyList</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames.Generate.pas">
             <Form>FrameGenerate</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Frames.PersonEdit.pas">
             <Form>FramePersonEdit</Form>
-            <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <None Include="Database\photokiosk_schema.sql"/>

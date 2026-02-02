@@ -84,7 +84,7 @@ begin
 
   Ini := TMemIniFile.Create(IniPath);
   try
-    Result := Ini.ReadString('Database', 'Path', '');
+    Result := Ini.ReadString('Paths', 'Database', '');
     if Result = '' then
       raise Exception.CreateFmt('Database path not configured in: %s', [IniPath]);
   finally

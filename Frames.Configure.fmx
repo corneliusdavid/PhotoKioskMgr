@@ -118,48 +118,6 @@ object FrameConfigure: TFrameConfigure
         end
       end
     end
-    object layDatabase: TLayout
-      Align = Top
-      Margins.Bottom = 20.000000000000000000
-      Position.X = 20.000000000000000000
-      Position.Y = 277.000000000000000000
-      Size.Width = 760.000000000000000000
-      Size.Height = 80.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
-      object lblDatabasePath: TLabel
-        Align = Top
-        Margins.Bottom = 5.000000000000000000
-        Size.Width = 760.000000000000000000
-        Size.Height = 20.000000000000000000
-        Size.PlatformDefault = False
-        Text = 'Database File:'
-        TabOrder = 0
-      end
-      object edtDatabasePath: TEdit
-        Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-        Align = Top
-        TabOrder = 1
-        ReadOnly = True
-        Position.Y = 25.000000000000000000
-        Margins.Right = 120.000000000000000000
-        Margins.Bottom = 10.000000000000000000
-        Size.Width = 640.000000000000000000
-        Size.Height = 32.000000000000000000
-        Size.PlatformDefault = False
-        object btnTestConnection: TButton
-          Margins.Left = 650.000000000000000000
-          Margins.Bottom = 10.000000000000000000
-          Position.X = 650.000000000000000000
-          Size.Width = 100.000000000000000000
-          Size.Height = 32.000000000000000000
-          Size.PlatformDefault = False
-          TabOrder = 0
-          Text = 'Test Connection'
-          OnClick = btnTestConnectionClick
-        end
-      end
-    end
     object layConfigButtons: TLayout
       Align = Bottom
       Position.X = 20.000000000000000000
@@ -167,7 +125,7 @@ object FrameConfigure: TFrameConfigure
       Size.Width = 760.000000000000000000
       Size.Height = 92.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 2
+      TabOrder = 1
       object btnSaveConfig: TButton
         Align = Left
         Margins.Right = 10.000000000000000000
