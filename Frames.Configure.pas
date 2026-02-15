@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.DialogService, FMX.StdCtrls,
   FMX.Layouts, FMX.Edit, FMX.Controls.Presentation, udmPhotoKiosk;
 
 type
@@ -168,11 +168,13 @@ end;
 
 procedure TFrameConfigure.btnResetToDefaultsClick(Sender: TObject);
 begin
-  if MessageDlg('Reset all paths to defaults?', TMsgDlgType.mtConfirmation,
-                [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes then
-  begin
-    SetDefaultPaths;
-  end;
+  TDialogService.MessageDialog('Reset all paths to defaults?', TMsgDlgType.mtConfirmation,
+    [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], TMsgDlgBtn.mbNo, 0,
+    procedure(const AResult: TModalResult)
+    begin
+      if AResult = mrYes then
+        SetDefaultPaths;
+    end);
 end;
 
 procedure TFrameConfigure.btnBackClick(Sender: TObject);

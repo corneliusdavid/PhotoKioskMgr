@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.DialogService, FMX.StdCtrls,
   FMX.Layouts, FMX.Edit, FMX.Controls.Presentation, FMX.ScrollBox, FMX.Memo,
   FMX.ListView.Types, FMX.ListView.Appearances, FMX.ListView.Adapters.Base,
   FMX.ListView, FMX.Memo.Types,
@@ -13,7 +13,7 @@ uses
   Data.Bind.DBScope, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  udmPhotoKiosk, Beyond.Bind.DateUtils, Beyond.Bind.Json, Beyond.Bind.StrUtils;
+  udmPhotoKiosk;
 
 type
   TOnNavigateToPersonEdit = procedure(PersonID: Integer; FamilyID: Integer) of object;
@@ -228,13 +228,18 @@ begin
 
   if Assigned(FOnNavigateToList) then
     FOnNavigateToList
-  else if MessageDlg('Discard changes?', TMsgDlgType.mtConfirmation,
-                [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes then
-  begin
-    // Just cancel the edit state
-    if dmPhotoKiosk.qryFamilyEdit.Active then
-      dmPhotoKiosk.qryFamilyEdit.Close;
-  end;
+  else
+    TDialogService.MessageDialog('Discard changes?', TMsgDlgType.mtConfirmation,
+      [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], TMsgDlgBtn.mbNo, 0,
+      procedure(const AResult: TModalResult)
+      begin
+        if AResult = mrYes then
+        begin
+          // Just cancel the edit state
+          if dmPhotoKiosk.qryFamilyEdit.Active then
+            dmPhotoKiosk.qryFamilyEdit.Close;
+        end;
+      end);
 end;
 
 procedure TFrameFamilyEdit.btnAddPersonClick(Sender: TObject);

@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.DialogService, FMX.StdCtrls,
   FMX.Layouts, FMX.ListView.Types, FMX.ListView.Appearances,
   FMX.ListView.Adapters.Base, FMX.ListView, FMX.Controls.Presentation,
   FMX.Edit, udmPhotoKiosk, Data.DB;
@@ -55,7 +55,7 @@ implementation
 {$R *.fmx}
 
 uses
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client, FireDAC.Stan.Param;
 
 constructor TFrameFamilyList.Create(AOwner: TComponent);
 begin
@@ -177,28 +177,32 @@ begin
   FamilyID := GetSelectedFamilyID;
   if FamilyID > 0 then
   begin
-    if MessageDlg('Delete this family and all associated people?',
-                  TMsgDlgType.mtConfirmation,
-                  [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes then
-    begin
-      qry := TFDQuery.Create(nil);
-      try
-        qry.Connection := dmPhotoKiosk.FDConnection;
-        // Soft delete - set is_active to 0
-        qry.SQL.Text := 'UPDATE families SET is_active = 0 WHERE id = :id';
-        qry.ParamByName('id').AsInteger := FamilyID;
-        qry.ExecSQL;
+    TDialogService.MessageDialog('Delete this family and all associated people?',
+      TMsgDlgType.mtConfirmation,
+      [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], TMsgDlgBtn.mbNo, 0,
+      procedure(const AResult: TModalResult)
+      begin
+        if AResult = mrYes then
+        begin
+          qry := TFDQuery.Create(nil);
+          try
+            qry.Connection := dmPhotoKiosk.FDConnection;
+            // Soft delete - set is_active to 0
+            qry.SQL.Text := 'UPDATE families SET is_active = 0 WHERE id = :id';
+            qry.ParamByName('id').AsInteger := FamilyID;
+            qry.ExecSQL;
 
-        // Also soft delete all people in the family
-        qry.SQL.Text := 'UPDATE people SET is_active = 0 WHERE family_id = :family_id';
-        qry.ParamByName('family_id').AsInteger := FamilyID;
-        qry.ExecSQL;
+            // Also soft delete all people in the family
+            qry.SQL.Text := 'UPDATE people SET is_active = 0 WHERE family_id = :family_id';
+            qry.ParamByName('family_id').AsInteger := FamilyID;
+            qry.ExecSQL;
 
-        LoadFamilies;
-      finally
-        qry.Free;
-      end;
-    end;
+            LoadFamilies;
+          finally
+            qry.Free;
+          end;
+        end;
+      end);
   end
   else
     ShowMessage('Please select a family to delete');

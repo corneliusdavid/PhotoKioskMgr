@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
-  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.StdCtrls,
+  FMX.Types, FMX.Graphics, FMX.Controls, FMX.Forms, FMX.Dialogs, FMX.DialogService, FMX.StdCtrls,
   FMX.Layouts, FMX.Edit, FMX.Controls.Presentation, FMX.ListBox,
   Data.DB, Data.Bind.EngExt, Fmx.Bind.DBEngExt, System.Rtti,
   System.Bindings.Outputs, Fmx.Bind.Editors, Data.Bind.Components,
@@ -282,12 +282,17 @@ begin
 
   if Assigned(FOnNavigateBack) then
     FOnNavigateBack(FFamilyID)
-  else if MessageDlg('Discard changes?', TMsgDlgType.mtConfirmation,
-                [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], 0) = mrYes then
-  begin
-    if qryPerson.Active then
-      qryPerson.Close;
-  end;
+  else
+    TDialogService.MessageDialog('Discard changes?', TMsgDlgType.mtConfirmation,
+      [TMsgDlgBtn.mbYes, TMsgDlgBtn.mbNo], TMsgDlgBtn.mbNo, 0,
+      procedure(const AResult: TModalResult)
+      begin
+        if AResult = mrYes then
+        begin
+          if qryPerson.Active then
+            qryPerson.Close;
+        end;
+      end);
 end;
 
 procedure TFramePersonEdit.btnBrowsePhotoClick(Sender: TObject);
