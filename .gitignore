@@ -1,3 +1,9 @@
 ﻿*.res
 *.dsv
 *.json
+*.dsk
+*.~dsk
+*.local
+/__history
+/Win32
+*.vlb
